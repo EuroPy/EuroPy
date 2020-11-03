@@ -4,10 +4,10 @@ with open("README.md", "r") as fh:
     long_description = fh.read()
 
 setuptools.setup(
-    name="example-pkg-c0deking",
-    author="John Doe",
+    name="EuroPy",
+    author="Matthew Alvarez, Jenny Lam, Sundar Rajan,  Blaine Rothrock",
     author_email="author@example.com",
-    description="A small example package",
+    description="EuroPy testing framework for Machine Learning",
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/EuroPy/EuroPyt",
