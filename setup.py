@@ -2,9 +2,15 @@ import setuptools
 
 with open("README.md", "r") as fh:
     long_description = fh.read()
+import git
+
+repo = git.Repo('./')
+tags = sorted(repo.tags, key=lambda t: t.commit.committed_datetime)
+version = tags[-1]
 
 setuptools.setup(
     name="EuroPy",
+    version=str(version),
     author="Matthew Alvarez, Jenny Lam, Sundar Rajan,  Blaine Rothrock",
     author_email="author@example.com",
     description="EuroPy testing framework for Machine Learning",
