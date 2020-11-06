@@ -11,17 +11,23 @@ version = tags[-1]
 setuptools.setup(
     name="EuroPy",
     version=str(version),
-    author="Matthew Alvarez, Jenny Lam, Sundar Rajan,  Blaine Rothrock",
+    author="Matthew Alvarez, Jenny Lam, Sundar Rajan, Blaine Rothrock",
     author_email="author@example.com",
     description="EuroPy testing framework for Machine Learning",
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/EuroPy/EuroPyt",
     packages=setuptools.find_packages(),
+    entry_points={
+        "pytest11": [
+            "europy = europy.pytest_europy"
+        ]
+    },
     classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: Apache Software License",
         "Operating System :: OS Independent",
+        "Framework :: Pytest"
     ],
     python_requires='>=3.6',
 )
