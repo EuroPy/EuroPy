@@ -1,6 +1,6 @@
 import pytest
 
-from europy.fixtures.report import basic_report
+# from europy.fixtures.report import basic_report
 
 
 # def test_bias_marker(testdir):
