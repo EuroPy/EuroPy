@@ -1,13 +1,16 @@
 from functools import wraps
 
+from europy.lifecycle import reporting
 
-def report_bias(description: str):
+
+def bias(description: str):
     def inner_bias_wrapper(func):
         @wraps(func)
         def bias_wrapper(*args, **kwargs):
-            test = func(*args, **kwargs)
-            print(test)
-            return test
+            key = str(func)
+            result = func(*args, **kwargs)
+            reporting.capture(result, key, description)
+            return result
 
         return bias_wrapper
 

@@ -1,6 +1,6 @@
 import pytest
 
-REPORTS = []
+from europy.lifecycle import reporting
 
 
 @pytest.hookimpl()
@@ -31,8 +31,7 @@ def pytest_configure(config):
 
 @pytest.hookimpl()
 def pytest_terminal_summary(terminalreporter, exitstatus, config):
-    # TODO: this should be where to build the report JSON object
-    pass
+    reporting.save_output()
 
 
 @pytest.hookimpl(hookwrapper=True)
@@ -41,7 +40,9 @@ def pytest_pyfunc_call(pyfuncitem):
 
     outcome = yield
 
-    res = outcome.get_result()  # will raise if outcome was exception
+    # Will raise an error if the outcome throws
+    res = outcome.get_result()
+    key = str(pyfuncitem)
 
-    # TODO: maybe add to the report here
-    print()
+    # TODO: We somehow should try to get the function name and description
+    reporting.capture(res, key)
