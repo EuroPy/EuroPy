@@ -1,5 +1,6 @@
 from functools import wraps
 
+
 def report_bias(description: str):
     def inner_bias_wrapper(func):
         @wraps(func)
@@ -7,5 +8,7 @@ def report_bias(description: str):
             test = func(*args, **kwargs)
             print(test)
             return test
+
         return bias_wrapper
+
     return inner_bias_wrapper

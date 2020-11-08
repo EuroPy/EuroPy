@@ -1,5 +1,8 @@
 import pytest
 
+from europy.fixtures.report import basic_report
+
+
 # def test_bias_marker(testdir):
 #     testdir.makepyfile(
 #         """
@@ -16,9 +19,9 @@ import pytest
 #     result = testdir.runpytest('--strict-markers')
 #     result.assert_outcomes(passed=1)
 
+
 @pytest.mark.bias
-def test_sample(basic_report):
-    
+def test_sample(basic_report: basic_report):
     basic_report.status = True
-    
+
     assert True

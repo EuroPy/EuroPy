@@ -1,29 +1,28 @@
 import pytest
-from functools import wraps
-from .report import Report, BasicReport
 
 REPORTS = []
+
 
 @pytest.hookimpl()
 def pytest_addoption(parser):
     # TODO: build report object
     pass
 
+
 def pytest_configure(config):
-    
     # build marks
     config.addinivalue_line(
-        "markers", 
+        "markers",
         "report_bias: this is a marker for bias tests"
     )
 
     config.addinivalue_line(
-        "markers", 
+        "markers",
         "report_accurarcy: this is a marker for bias tests"
     )
 
     config.addinivalue_line(
-        "markers", 
+        "markers",
         "report_performance: this is a marker for bias tests"
     )
 
@@ -35,6 +34,7 @@ def pytest_terminal_summary(terminalreporter, exitstatus, config):
     # TODO: this should be where to build the report JSON object
     pass
 
+
 @pytest.hookimpl(hookwrapper=True)
 def pytest_pyfunc_call(pyfuncitem):
     # do_something_before_next_hook_executes()
@@ -45,10 +45,3 @@ def pytest_pyfunc_call(pyfuncitem):
 
     # TODO: maybe add to the report here
     print()
-
-
-@pytest.fixture()
-def basic_report():
-    report = BasicReport("")
-    REPORTS.append(report)
-    return report
