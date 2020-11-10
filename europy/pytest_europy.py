@@ -45,12 +45,13 @@ def pytest_pyfunc_call(pyfuncitem: Function):
     outcome = yield
 
     # Will raise an error if the outcome throws
-    result: Union[str, bool, DataFrame, TestResult] = outcome.get_result()
+    result: Union[float, str, bool, DataFrame, TestResult] = outcome.get_result()
+    marks: List[Mark] = pyfuncitem.own_markers
+    labels: List[TestLabel] = [TestLabel.of(mark) for mark in marks]
 
     if isinstance(result, TestResult):
-        reporting.capture(result.key, result.labels, result.result, result.description)
+        labels.extend(result.labels)
+        reporting.capture(result.key, labels, result.result, result.description)
     else:
         node_id = pyfuncitem.nodeid
-        marks: List[Mark] = pyfuncitem.own_markers
-        labels: List[TestLabel] = [TestLabel.of(mark) for mark in marks]
         reporting.capture(node_id, labels, result, "")

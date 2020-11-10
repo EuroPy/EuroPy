@@ -5,7 +5,7 @@ from _pytest.mark import Mark
 from pandas import DataFrame
 
 
-class TestLabel(Enum):
+class TestLabel(str, Enum):
     BIAS = "bias"
     FAIRNESS = "fairness"
 
@@ -13,9 +13,15 @@ class TestLabel(Enum):
     def of(mark: Mark):
         return TestLabel(mark.name)
 
+    def __json__(self):
+        return str(self.value)
+
 
 class TestResult:
-    def __init__(self, key: str, labels: List[TestLabel], result: Union[str, bool, DataFrame], description: str):
+    def __init__(self, key: str,
+                 labels: List[TestLabel],
+                 result: Union[float, str, bool, DataFrame],
+                 description: str):
         self.key = key
         self.description = description
         self.labels = labels

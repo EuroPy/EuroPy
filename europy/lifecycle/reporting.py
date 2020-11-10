@@ -14,7 +14,7 @@ def get_report() -> Report:
 
 def capture(key: str,
             labels: List[TestLabel],
-            result: Union[str, DataFrame],
+            result: Union[float, str, bool, DataFrame, TestResult],
             description: str = "") -> TestResult:
     test_result = TestResult(key, labels, result, description)
     report.capture(test_result)
