@@ -1,7 +1,13 @@
+from typing import List, Union
+
 import pytest
+from _pytest.mark import Mark
+from _pytest.python import Function
+from pandas import DataFrame
 
 from europy.lifecycle import reporting
-
+from europy.lifecycle.test_result import TestLabel, TestResult
+from europy.fixtures.report import report, test_result
 
 @pytest.hookimpl()
 def pytest_addoption(parser):
@@ -31,18 +37,20 @@ def pytest_configure(config):
 
 @pytest.hookimpl()
 def pytest_terminal_summary(terminalreporter, exitstatus, config):
-    reporting.save_output()
+    reporting.flush()
 
 
 @pytest.hookimpl(hookwrapper=True)
-def pytest_pyfunc_call(pyfuncitem):
-    # do_something_before_next_hook_executes()
-
+def pytest_pyfunc_call(pyfuncitem: Function):
     outcome = yield
 
     # Will raise an error if the outcome throws
-    res = outcome.get_result()
-    key = str(pyfuncitem)
+    result: Union[str, bool, DataFrame, TestResult] = outcome.get_result()
 
-    # TODO: We somehow should try to get the function name and description
-    reporting.capture(res, key)
+    if isinstance(result, TestResult):
+        reporting.capture(result.key, result.labels, result.result, result.description)
+    else:
+        node_id = pyfuncitem.nodeid
+        marks: List[Mark] = pyfuncitem.own_markers
+        labels: List[TestLabel] = [TestLabel.of(mark) for mark in marks]
+        reporting.capture(node_id, labels, result, "")

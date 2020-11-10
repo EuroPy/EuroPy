@@ -1,25 +1,27 @@
-import json
 from typing import Union, List
 
 from pandas import DataFrame
 
+from europy.lifecycle.report import Report
+from europy.lifecycle.test_result import TestResult, TestLabel
 
-class TestResult:
-    def __init__(self, key: str, description: str, result: Union[str, DataFrame]):
-        self.key = key
-        self.description = description
-        self.result = result
+report: Report = Report()
 
 
-# Global member
-REPORTS: List[TestResult] = []
+def get_report() -> Report:
+    return report
 
 
-# Ideally descri
-def capture(result: Union[str, DataFrame], key: str = "", description: str = ""):
-    REPORTS.append(TestResult(description, key, result))
+def capture(key: str,
+            labels: List[TestLabel],
+            result: Union[str, DataFrame],
+            description: str = "") -> TestResult:
+    test_result = TestResult(key, labels, result, description)
+    report.capture(test_result)
+    return test_result
+
 
 
 def flush():
-    with open('test_output.json', 'w') as outfile:
-        json.dump(REPORTS, outfile)
+    with open('europy_output.json', 'w') as outfile:
+        outfile.write(report.to_dictionaries())

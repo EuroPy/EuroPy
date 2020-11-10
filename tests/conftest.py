@@ -1,4 +1,4 @@
-pytest_plugins = ['pytester']
+pytest_plugins = ['pytester', 'europy']
 
 try:
     import pathlib
