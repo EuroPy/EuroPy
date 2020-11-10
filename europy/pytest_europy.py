@@ -1,29 +1,34 @@
-import pytest
-from functools import wraps
-from .report import Report, BasicReport
+from typing import List, Union
 
-REPORTS = []
+import pytest
+from _pytest.mark import Mark
+from _pytest.python import Function
+from pandas import DataFrame
+
+from europy.lifecycle import reporting
+from europy.lifecycle.test_result import TestLabel, TestResult
+from europy.fixtures.report import report, test_result
 
 @pytest.hookimpl()
 def pytest_addoption(parser):
     # TODO: build report object
     pass
 
+
 def pytest_configure(config):
-    
     # build marks
     config.addinivalue_line(
-        "markers", 
+        "markers",
         "report_bias: this is a marker for bias tests"
     )
 
     config.addinivalue_line(
-        "markers", 
+        "markers",
         "report_accurarcy: this is a marker for bias tests"
     )
 
     config.addinivalue_line(
-        "markers", 
+        "markers",
         "report_performance: this is a marker for bias tests"
     )
 
@@ -32,23 +37,20 @@ def pytest_configure(config):
 
 @pytest.hookimpl()
 def pytest_terminal_summary(terminalreporter, exitstatus, config):
-    # TODO: this should be where to build the report JSON object
-    pass
+    reporting.flush()
+
 
 @pytest.hookimpl(hookwrapper=True)
-def pytest_pyfunc_call(pyfuncitem):
-    # do_something_before_next_hook_executes()
-
+def pytest_pyfunc_call(pyfuncitem: Function):
     outcome = yield
 
-    res = outcome.get_result()  # will raise if outcome was exception
+    # Will raise an error if the outcome throws
+    result: Union[str, bool, DataFrame, TestResult] = outcome.get_result()
 
-    # TODO: maybe add to the report here
-    print()
-
-
-@pytest.fixture()
-def basic_report():
-    report = BasicReport("")
-    REPORTS.append(report)
-    return report
+    if isinstance(result, TestResult):
+        reporting.capture(result.key, result.labels, result.result, result.description)
+    else:
+        node_id = pyfuncitem.nodeid
+        marks: List[Mark] = pyfuncitem.own_markers
+        labels: List[TestLabel] = [TestLabel.of(mark) for mark in marks]
+        reporting.capture(node_id, labels, result, "")
