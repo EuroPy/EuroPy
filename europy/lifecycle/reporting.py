@@ -3,7 +3,7 @@ from typing import Union, List
 from pandas import DataFrame
 
 from europy.lifecycle.report import Report
-from europy.lifecycle.test_result import TestResult, TestLabel
+from europy.lifecycle.result import TestResult, TestLabel
 
 report: Report = Report()
 

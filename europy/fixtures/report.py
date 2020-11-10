@@ -1,7 +1,7 @@
 import pytest
 
 from europy.lifecycle.reporting import get_report
-from europy.lifecycle.test_result import TestResult
+from europy.lifecycle.result import TestResult
 
 
 @pytest.fixture()

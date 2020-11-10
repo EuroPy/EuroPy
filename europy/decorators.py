@@ -4,7 +4,7 @@ from typing import Union, List
 from pandas import DataFrame
 
 from europy.lifecycle import reporting
-from europy.lifecycle.test_result import TestLabel
+from europy.lifecycle.result import TestLabel
 
 
 def bias(name: str,

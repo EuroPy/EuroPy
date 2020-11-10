@@ -3,7 +3,7 @@ from typing import Union
 
 from pandas import DataFrame
 
-from europy.lifecycle.test_result import TestResult, TestLabel
+from europy.lifecycle.result import TestResult, TestLabel
 
 
 class Encoder(json.JSONEncoder):

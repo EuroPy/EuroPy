@@ -6,7 +6,7 @@ from _pytest.python import Function
 from pandas import DataFrame
 
 from europy.lifecycle import reporting
-from europy.lifecycle.test_result import TestLabel, TestResult
+from europy.lifecycle.result import TestLabel, TestResult
 from europy.fixtures.report import report, test_result
 
 @pytest.hookimpl()
@@ -19,17 +19,17 @@ def pytest_configure(config):
     # build marks
     config.addinivalue_line(
         "markers",
-        "report_bias: this is a marker for bias tests"
+        "bias: this is a marker for bias tests"
     )
 
     config.addinivalue_line(
         "markers",
-        "report_accurarcy: this is a marker for bias tests"
+        "accurarcy: this is a marker for bias tests"
     )
 
     config.addinivalue_line(
         "markers",
-        "report_performance: this is a marker for bias tests"
+        "performance: this is a marker for bias tests"
     )
 
     print()
