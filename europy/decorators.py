@@ -4,7 +4,7 @@ from typing import Union, List
 from pandas import DataFrame
 
 from europy.lifecycle import reporting
-from europy.lifecycle.result import TestLabel
+from europy.lifecycle.result import TestLabel, TestResult
 
 
 def bias(name: str,
@@ -14,9 +14,13 @@ def bias(name: str,
     def inner_bias_wrapper(func):
         @wraps(func)
         def bias_wrapper(*args, **kwargs):
-            result: Union[str, DataFrame, bool] = func(*args, **kwargs)
-            test_result = reporting.capture(name, labels, result, description)
-            return test_result
+            result: Union[float, str, bool, DataFrame, TestResult] = func(*args, **kwargs)
+
+            if isinstance(result, TestResult):
+                labels.extend(result.labels)
+                return reporting.capture(result.key, labels, result.result, result.description)
+            else:
+                return reporting.capture(name, labels, result, description)
 
         return bias_wrapper
 
