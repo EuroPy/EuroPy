@@ -7,7 +7,7 @@ from europy.lifecycle.report import Report
 from europy.lifecycle.result import TestResult, TestLabel
 
 report: Report = Report()
-root_report_directory = '.europy_report'
+root_report_directory = '.europy/reports'
 
 
 def get_report() -> Report:
