@@ -1,7 +1,8 @@
 import pytest
 from pandas import DataFrame
 
-from build.lib.europy.lifecycle.result import TestResult, TestLabel
+import europy
+from europy.lifecycle.result import TestResult, TestLabel
 from europy.decorators import bias
 from europy.lifecycle.report import Report
 

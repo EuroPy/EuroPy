@@ -1,5 +1,7 @@
 import json
-from typing import Union
+from typing import Union, Optional
+from datetime import datetime
+from europy.lifecycle.modeldetails import ModelDetails
 
 from pandas import DataFrame
 
@@ -14,18 +16,24 @@ class Encoder(json.JSONEncoder):
             return obj.to_dict()
         if isinstance(obj, Report):
             return obj.__dict__
+        if isinstance(obj, ModelDetails):
+            return obj.__dict__
         if isinstance(obj, TestResult):
             return obj.__dict__
+        if isinstance(obj, datetime):
+            return str(obj)
         return json.JSONEncoder.default(self, obj)
 
 
 class Report:
     def __init__(self, title: str = "EuroPy Test Report"):
         self.test_results: dict = dict()
-        self.title = title
+        self.details: ModelDetails = ModelDetails(title=title)
+        self.timestamp = datetime.now()
 
-    def to_dictionaries(self):
-        return json.dumps(self, cls=Encoder)
+    def to_dictionaries(self, pretty: bool=False):
+        indent = 4 if pretty else None
+        return json.dumps(self, cls=Encoder, indent=indent)
 
     def capture(self, test_result: TestResult):
         self.test_results[test_result.key] = test_result

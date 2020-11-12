@@ -8,6 +8,8 @@ from pandas import DataFrame
 class TestLabel(str, Enum):
     BIAS = "bias"
     FAIRNESS = "fairness"
+    TRANSPARENCY = "transparency"
+    ACCOUNTABILITY = "accountability"
 
     @staticmethod
     def of(mark: Mark):
@@ -15,6 +17,16 @@ class TestLabel(str, Enum):
 
     def __json__(self):
         return str(self.value)
+
+    def description(self):
+        if (self == BIAS):
+            return ""
+        if (self == FAIRNESS):
+            return ""
+        if (self == TRANSPARENCY):
+            return ""
+        if (self == ACCOUNTABILITY):
+            return ""
 
 
 class TestResult:
