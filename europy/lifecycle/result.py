@@ -18,16 +18,6 @@ class TestLabel(str, Enum):
     def __json__(self):
         return str(self.value)
 
-    def description(self):
-        if (self == BIAS):
-            return ""
-        if (self == FAIRNESS):
-            return ""
-        if (self == TRANSPARENCY):
-            return ""
-        if (self == ACCOUNTABILITY):
-            return ""
-
 
 class TestResult:
     def __init__(self, key: str,
