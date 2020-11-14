@@ -12,7 +12,7 @@ def test(label: str = "",
          description: str = ""):
     labels: List[Union[str, TestLabel]] = [label]
 
-    def inner_bias_wrapper(func):
+    def inner_wrapper(func):
         @wraps(func)
         def func_wrapper(*args, **kwargs):
             result: Union[float, str, bool, DataFrame, TestResult] = func(*args, **kwargs)
@@ -25,14 +25,14 @@ def test(label: str = "",
 
         return func_wrapper
 
-    return inner_bias_wrapper
+    return inner_wrapper
 
 
 def bias(name: str = "",
          description: str = ""):
     labels: List[Union[str, TestLabel]] = [TestLabel.BIAS]
 
-    def inner_bias_wrapper(func):
+    def inner_wrapper(func):
         @wraps(func)
         def func_wrapper(*args, **kwargs):
             result: Union[float, str, bool, DataFrame, TestResult] = func(*args, **kwargs)
@@ -45,14 +45,14 @@ def bias(name: str = "",
 
         return func_wrapper
 
-    return inner_bias_wrapper
+    return inner_wrapper
 
 
 def data_bias(name: str = "",
               description: str = ""):
     labels: List[Union[str, TestLabel]] = [TestLabel.DATA_BIAS]
 
-    def inner_bias_wrapper(func):
+    def inner_wrapper(func):
         @wraps(func)
         def func_wrapper(*args, **kwargs):
             result: Union[float, str, bool, DataFrame, TestResult] = func(*args, **kwargs)
@@ -65,14 +65,14 @@ def data_bias(name: str = "",
 
         return func_wrapper
 
-    return inner_bias_wrapper
+    return inner_wrapper
 
 
 def fairness(name: str = "",
              description: str = ""):
     labels: List[Union[str, TestLabel]] = [TestLabel.FAIRNESS]
 
-    def inner_bias_wrapper(func):
+    def inner_wrapper(func):
         @wraps(func)
         def func_wrapper(*args, **kwargs):
             result: Union[float, str, bool, DataFrame, TestResult] = func(*args, **kwargs)
@@ -85,14 +85,14 @@ def fairness(name: str = "",
 
         return func_wrapper
 
-    return inner_bias_wrapper
+    return inner_wrapper
 
 
 def accuracy(name: str = "",
              description: str = ""):
     labels: List[Union[str, TestLabel]] = [TestLabel.ACCURACY]
 
-    def inner_bias_wrapper(func):
+    def inner_wrapper(func):
         @wraps(func)
         def func_wrapper(*args, **kwargs):
             result: Union[float, str, bool, DataFrame, TestResult] = func(*args, **kwargs)
@@ -105,14 +105,14 @@ def accuracy(name: str = "",
 
         return func_wrapper
 
-    return inner_bias_wrapper
+    return inner_wrapper
 
 
 def unit(name: str = "",
          description: str = ""):
     labels: List[Union[str, TestLabel]] = [TestLabel.UNIT]
 
-    def inner_bias_wrapper(func):
+    def inner_wrapper(func):
         @wraps(func)
         def func_wrapper(*args, **kwargs):
             result: Union[float, str, bool, DataFrame, TestResult] = func(*args, **kwargs)
@@ -125,14 +125,14 @@ def unit(name: str = "",
 
         return func_wrapper
 
-    return inner_bias_wrapper
+    return inner_wrapper
 
 
 def integration(name: str = "",
                 description: str = ""):
     labels: List[Union[str, TestLabel]] = [TestLabel.INTEGRATION]
 
-    def inner_bias_wrapper(func):
+    def inner_wrapper(func):
         @wraps(func)
         def func_wrapper(*args, **kwargs):
             result: Union[float, str, bool, DataFrame, TestResult] = func(*args, **kwargs)
@@ -145,14 +145,14 @@ def integration(name: str = "",
 
         return func_wrapper
 
-    return inner_bias_wrapper
+    return inner_wrapper
 
 
 def minimum_functionality(name: str = "",
                           description: str = ""):
     labels: List[Union[str, TestLabel]] = [TestLabel.MINIMUM_FUNCTIONALITY]
 
-    def inner_bias_wrapper(func):
+    def inner_wrapper(func):
         @wraps(func)
         def func_wrapper(*args, **kwargs):
             result: Union[float, str, bool, DataFrame, TestResult] = func(*args, **kwargs)
@@ -165,4 +165,4 @@ def minimum_functionality(name: str = "",
 
         return func_wrapper
 
-    return inner_bias_wrapper
+    return inner_wrapper
