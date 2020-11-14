@@ -1,14 +1,27 @@
 from pandas import DataFrame
 
-from europy.decorators import bias, fairness, unit, minimum_functionality, integration, data_bias, test
+from europy.decorators import bias, fairness, unit, minimum_functionality, integration, data_bias, test, \
+    decorator_factory
 
 EXAMPLE_LABEL_NAME = "my-custom-label"
+
+
+def custom_decorator(name: str = ""):
+    labels = ["my-custom-decorator-label"]
+    return decorator_factory(labels, name)
+
 
 df = DataFrame([[1, 2], [3, 4]], columns=['odds', 'evens'])
 
 
 @test(EXAMPLE_LABEL_NAME, "My custom label test")
 def test_custom_label():
+    assert True
+    return df
+
+
+@custom_decorator("Test with custom decorator")
+def test_custom_decorator():
     assert True
     return df
 
