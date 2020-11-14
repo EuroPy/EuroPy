@@ -2,18 +2,21 @@ from pandas import DataFrame
 
 from europy.decorators import bias, fairness, unit, minimum_functionality, integration, data_bias, test, \
     decorator_factory
+from europy.lifecycle.result import TestLabel
 
 EXAMPLE_LABEL_NAME = "my-custom-label"
 
 
+# This is how you make your own decorator for tests with a custom label or with a provided label
 def custom_decorator(name: str = ""):
-    labels = ["my-custom-decorator-label"]
+    labels = ["my-custom-decorator-label", TestLabel.MINIMUM_FUNCTIONALITY]
     return decorator_factory(labels, name)
 
 
 df = DataFrame([[1, 2], [3, 4]], columns=['odds', 'evens'])
 
 
+# This is how you can create your own labels on the fly
 @test(EXAMPLE_LABEL_NAME, "My custom label test")
 def test_custom_label():
     assert True
