@@ -7,13 +7,14 @@ from europy.lifecycle import reporting
 from europy.lifecycle.result import TestLabel, TestResult
 
 
-def bias(name: str,
+def test(label: str = "",
+         name: str = "",
          description: str = ""):
-    labels: List[TestLabel] = [TestLabel.BIAS]
+    labels: List[Union[str, TestLabel]] = [label]
 
     def inner_bias_wrapper(func):
         @wraps(func)
-        def bias_wrapper(*args, **kwargs):
+        def func_wrapper(*args, **kwargs):
             result: Union[float, str, bool, DataFrame, TestResult] = func(*args, **kwargs)
 
             if isinstance(result, TestResult):
@@ -22,6 +23,146 @@ def bias(name: str,
             else:
                 return reporting.capture(name, labels, result, description)
 
-        return bias_wrapper
+        return func_wrapper
+
+    return inner_bias_wrapper
+
+
+def bias(name: str = "",
+         description: str = ""):
+    labels: List[Union[str, TestLabel]] = [TestLabel.BIAS]
+
+    def inner_bias_wrapper(func):
+        @wraps(func)
+        def func_wrapper(*args, **kwargs):
+            result: Union[float, str, bool, DataFrame, TestResult] = func(*args, **kwargs)
+
+            if isinstance(result, TestResult):
+                labels.extend(result.labels)
+                return reporting.capture(result.key, labels, result.result, result.description)
+            else:
+                return reporting.capture(name, labels, result, description)
+
+        return func_wrapper
+
+    return inner_bias_wrapper
+
+
+def data_bias(name: str = "",
+              description: str = ""):
+    labels: List[Union[str, TestLabel]] = [TestLabel.DATA_BIAS]
+
+    def inner_bias_wrapper(func):
+        @wraps(func)
+        def func_wrapper(*args, **kwargs):
+            result: Union[float, str, bool, DataFrame, TestResult] = func(*args, **kwargs)
+
+            if isinstance(result, TestResult):
+                labels.extend(result.labels)
+                return reporting.capture(result.key, labels, result.result, result.description)
+            else:
+                return reporting.capture(name, labels, result, description)
+
+        return func_wrapper
+
+    return inner_bias_wrapper
+
+
+def fairness(name: str = "",
+             description: str = ""):
+    labels: List[Union[str, TestLabel]] = [TestLabel.FAIRNESS]
+
+    def inner_bias_wrapper(func):
+        @wraps(func)
+        def func_wrapper(*args, **kwargs):
+            result: Union[float, str, bool, DataFrame, TestResult] = func(*args, **kwargs)
+
+            if isinstance(result, TestResult):
+                labels.extend(result.labels)
+                return reporting.capture(result.key, labels, result.result, result.description)
+            else:
+                return reporting.capture(name, labels, result, description)
+
+        return func_wrapper
+
+    return inner_bias_wrapper
+
+
+def accuracy(name: str = "",
+             description: str = ""):
+    labels: List[Union[str, TestLabel]] = [TestLabel.ACCURACY]
+
+    def inner_bias_wrapper(func):
+        @wraps(func)
+        def func_wrapper(*args, **kwargs):
+            result: Union[float, str, bool, DataFrame, TestResult] = func(*args, **kwargs)
+
+            if isinstance(result, TestResult):
+                labels.extend(result.labels)
+                return reporting.capture(result.key, labels, result.result, result.description)
+            else:
+                return reporting.capture(name, labels, result, description)
+
+        return func_wrapper
+
+    return inner_bias_wrapper
+
+
+def unit(name: str = "",
+         description: str = ""):
+    labels: List[Union[str, TestLabel]] = [TestLabel.UNIT]
+
+    def inner_bias_wrapper(func):
+        @wraps(func)
+        def func_wrapper(*args, **kwargs):
+            result: Union[float, str, bool, DataFrame, TestResult] = func(*args, **kwargs)
+
+            if isinstance(result, TestResult):
+                labels.extend(result.labels)
+                return reporting.capture(result.key, labels, result.result, result.description)
+            else:
+                return reporting.capture(name, labels, result, description)
+
+        return func_wrapper
+
+    return inner_bias_wrapper
+
+
+def integration(name: str = "",
+                description: str = ""):
+    labels: List[Union[str, TestLabel]] = [TestLabel.INTEGRATION]
+
+    def inner_bias_wrapper(func):
+        @wraps(func)
+        def func_wrapper(*args, **kwargs):
+            result: Union[float, str, bool, DataFrame, TestResult] = func(*args, **kwargs)
+
+            if isinstance(result, TestResult):
+                labels.extend(result.labels)
+                return reporting.capture(result.key, labels, result.result, result.description)
+            else:
+                return reporting.capture(name, labels, result, description)
+
+        return func_wrapper
+
+    return inner_bias_wrapper
+
+
+def minimum_functionality(name: str = "",
+                          description: str = ""):
+    labels: List[Union[str, TestLabel]] = [TestLabel.MINIMUM_FUNCTIONALITY]
+
+    def inner_bias_wrapper(func):
+        @wraps(func)
+        def func_wrapper(*args, **kwargs):
+            result: Union[float, str, bool, DataFrame, TestResult] = func(*args, **kwargs)
+
+            if isinstance(result, TestResult):
+                labels.extend(result.labels)
+                return reporting.capture(result.key, labels, result.result, result.description)
+            else:
+                return reporting.capture(name, labels, result, description)
+
+        return func_wrapper
 
     return inner_bias_wrapper
