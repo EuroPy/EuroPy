@@ -86,19 +86,36 @@ def minimum_functionality(name: str = "",
 
 
 def modeldetails(file_path: str = None):
+    """Adds a model details to the Report.
+
+    Args:
+        file_path (str, optional): Path to model details JSON file. Defaults to None.
+    """
     
     def inner_wrapper(func):
         @wraps(func)
         def inner_func_wrapper(*args, **kwargs):
             import json
-
-            result = func(*args, **kwargs)
+        
+            # pull current report (generated @ __init__)
+            details = reporting.get_report().model_card['details']
             
-            with open(file_path, 'r') as f:
-                details_data = json.load(f)
-                details = ModelDetails(**details_data)
-                reporting.capture_modeldetails(details)
+            if file_path:
+                # load the model detail path
+                with open(file_path, 'r') as f:
+                    details_data = json.load(f)
+                    details = ModelDetails(**details_data)
+                
+            # load details into the func arguments (optional)
+            kwargs['details'] = details
+            
+            result = func(*args, **kwargs)
+
+            # capture model details **after** func is executed
+            reporting.capture_modeldetails(details)
+
         return inner_func_wrapper
+
     return inner_wrapper
 
 

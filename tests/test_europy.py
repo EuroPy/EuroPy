@@ -79,6 +79,20 @@ def test_multiple_labels():
     return "Woah, what a fair unit test"
 
 
-@modeldetails('model_details.json')
-def test_model_details():
+@modeldetails('model_details.json') # this will override the current details in the report
+def test_model_details(details: ModelDetails=None):
+    import json
+    details.description += '... this is a computed description'
+
+    with open('model_details.json', 'r') as f:
+        loaded_details = ModelDetails(**json.load(f))
+
+        assert loaded_details.title == details.title
+        assert loaded_details.description != details.description
+
     assert True
+
+# this must run in order to pass
+@modeldetails() # this will load the latest in the report
+def test_loaded_model_details(details: ModelDetails=None):
+    assert '... this is a computed description' in details.description
