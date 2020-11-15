@@ -27,8 +27,12 @@ class Encoder(json.JSONEncoder):
 
 class Report:
     def __init__(self, title: str = "EuroPy Test Report"):
+        self.title = title
         self.test_results: dict = dict()
-        self.details: ModelDetails = ModelDetails(title=title)
+        self.model_card: dict = dict()
+
+        self.model_card['details'] = ModelDetails(title=title)
+
         self.timestamp = datetime.now()
 
     def to_dictionaries(self, pretty: bool=False):

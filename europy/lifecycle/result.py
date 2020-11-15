@@ -7,9 +7,14 @@ from pandas import DataFrame
 
 class TestLabel(str, Enum):
     BIAS = "bias"
+    DATA_BIAS = "data-bias"
     FAIRNESS = "fairness"
     TRANSPARENCY = "transparency"
     ACCOUNTABILITY = "accountability"
+    UNIT = "unit"
+    INTEGRATION = "integration"
+    ACCURACY = "accuracy"
+    MINIMUM_FUNCTIONALITY = "minimum-functionality"
 
     @staticmethod
     def of(mark: Mark):
@@ -21,7 +26,7 @@ class TestLabel(str, Enum):
 
 class TestResult:
     def __init__(self, key: str,
-                 labels: List[TestLabel],
+                 labels: List[Union[str, TestLabel]],
                  result: Union[float, str, bool, DataFrame],
                  description: str):
         self.key = key

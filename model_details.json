@@ -1,0 +1,14 @@
+{
+    "title": "A Generated Model Details",
+    "organization": "Northwestern University",
+    "authors": ["Blaine Rothrock"],
+    "emails": ["blainerothrock2020@u.northwestern.edu"],
+    "model_date": "2020-11-15 10:20:56.836960",
+    "model_version": "0.0.1",
+    "citation_details": "@cite{}",
+    "model_license": "Apache 2.0",
+    "model_url": "http://sample.com",
+    "data_license": "Apache 2.0",
+    "data_url": "http://sampledata.com",
+    "description": "some long description"
+}

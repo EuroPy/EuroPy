@@ -8,6 +8,7 @@ from pandas import DataFrame
 from europy.lifecycle import reporting
 from europy.lifecycle.result import TestLabel, TestResult
 from europy.fixtures.report import report, test_result
+from europy.decorators import test
 
 @pytest.hookimpl()
 def pytest_addoption(parser):
