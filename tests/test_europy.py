@@ -3,6 +3,8 @@ from pandas import DataFrame
 import europy
 from europy.lifecycle.result import TestResult, TestLabel
 from europy.lifecycle.report import Report
+
+# TODO: Explicitly import each decorator in release
 from europy.decorators import *
 
 EXAMPLE_LABEL_NAME = "my-custom-label"
@@ -91,7 +93,7 @@ def test_multiple_labels():
     return "Woah, what a fair unit test"
 
 
-@modeldetails('model_details.json') # this will override the current details in the report
+@model_details('model_details.json') # this will override the current details in the report
 def test_model_details(details: ModelDetails=None):
     import json
     details.description += '... this is a computed description'
@@ -105,6 +107,6 @@ def test_model_details(details: ModelDetails=None):
     assert True
 
 # this must run in order to pass
-@modeldetails() # this will load the latest in the report
+@model_details() # this will load the latest in the report
 def test_loaded_model_details(details: ModelDetails=None):
     assert '... this is a computed description' in details.description

@@ -23,7 +23,7 @@ def capture(key: str,
     report.capture(test_result)
     return test_result
 
-def capture_modeldetails(details: ModelDetails):
+def capture_model_details(details: ModelDetails):
     report.model_card['details'] = details
 
 

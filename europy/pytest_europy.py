@@ -41,18 +41,18 @@ def pytest_terminal_summary(terminalreporter, exitstatus, config):
     reporting.flush()
 
 
-@pytest.hookimpl(hookwrapper=True)
-def pytest_pyfunc_call(pyfuncitem: Function):
-    outcome = yield
+# @pytest.hookimpl(hookwrapper=True)
+# def pytest_pyfunc_call(pyfuncitem: Function):
+#     outcome = yield
 
-    # Will raise an error if the outcome throws
-    result: Union[float, str, bool, DataFrame, TestResult] = outcome.get_result()
-    marks: List[Mark] = pyfuncitem.own_markers
-    labels: List[TestLabel] = [TestLabel.of(mark) for mark in marks]
+#     # Will raise an error if the outcome throws
+#     result: Union[float, str, bool, DataFrame, TestResult] = outcome.get_result()
+#     marks: List[Mark] = pyfuncitem.own_markers
+#     labels: List[TestLabel] = [TestLabel.of(mark) for mark in marks]
 
-    if isinstance(result, TestResult):
-        labels.extend(result.labels)
-        reporting.capture(result.key, labels, result.result, result.description)
-    else:
-        node_id = pyfuncitem.nodeid
-        reporting.capture(node_id, labels, result, "")
+#     if isinstance(result, TestResult):
+#         labels.extend(result.labels)
+#         reporting.capture(result.key, labels, result.result, result.description)
+#     else:
+#         node_id = pyfuncitem.nodeid
+#         reporting.capture(node_id, labels, result, "")

@@ -98,7 +98,7 @@ def minimum_functionality(name: str = "",
 
 
 
-def modeldetails(file_path: str = None):
+def model_details(file_path: str = None):
     """Adds a model details to the Report.
 
     Args:
@@ -125,7 +125,7 @@ def modeldetails(file_path: str = None):
             result = func(*args, **kwargs)
 
             # capture model details **after** func is executed
-            reporting.capture_modeldetails(details)
+            reporting.capture_model_details(details)
 
         return inner_func_wrapper
 
