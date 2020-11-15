@@ -6,7 +6,7 @@ from pandas import DataFrame
 
 from europy.lifecycle import reporting
 from europy.lifecycle.result import TestLabel, TestResult
-from europy.lifecycle.modeldetails import ModelDetails
+from europy.lifecycle.model_details import ModelDetails
 
 
 def decorator_factory(labels: List[Union[str, TestLabel]],

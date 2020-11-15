@@ -1,7 +1,7 @@
 import json
 from typing import Union, Optional
 from datetime import datetime
-from europy.lifecycle.modeldetails import ModelDetails
+from europy.lifecycle.model_details import ModelDetails
 
 from pandas import DataFrame
 

@@ -5,7 +5,7 @@ from pandas import DataFrame
 
 from europy.lifecycle.report import Report
 from europy.lifecycle.result import TestResult, TestLabel
-from europy.lifecycle.modeldetails import ModelDetails
+from europy.lifecycle.model_details import ModelDetails
 
 report: Report = Report()
 root_report_directory = '.europy/reports'
