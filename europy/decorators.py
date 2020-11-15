@@ -1,10 +1,12 @@
 from functools import wraps
 from typing import Union, List
+import os
 
 from pandas import DataFrame
 
 from europy.lifecycle import reporting
 from europy.lifecycle.result import TestLabel, TestResult
+from europy.lifecycle.model_details import ModelDetails
 
 
 def decorator_factory(labels: List[Union[str, TestLabel]],
@@ -54,6 +56,17 @@ def fairness(name: str = "",
 
     return decorator_factory(labels, name, description)
 
+def transparency(name: str="",
+                 description: str = ""):
+    labels: List[Union[str, TestLabel]] = [TestLabel.TRANSPARENCY]
+    
+    return decorator_factory(labels, name, description)
+
+def accountability(name: str="",
+                 description: str = ""):
+    labels: List[Union[str, TestLabel]] = [TestLabel.ACCOUNTABILITY]
+    
+    return decorator_factory(labels, name, description)
 
 def accuracy(name: str = "",
              description: str = ""):
@@ -81,3 +94,42 @@ def minimum_functionality(name: str = "",
     labels: List[Union[str, TestLabel]] = [TestLabel.MINIMUM_FUNCTIONALITY]
 
     return decorator_factory(labels, name, description)
+
+
+
+
+def model_details(file_path: str = None):
+    """Adds a model details to the Report.
+
+    Args:
+        file_path (str, optional): Path to model details JSON file. Defaults to None.
+    """
+    
+    def inner_wrapper(func):
+        @wraps(func)
+        def inner_func_wrapper(*args, **kwargs):
+            import json
+        
+            # pull current report (generated @ __init__)
+            details = reporting.get_report().model_card['details']
+            
+            if file_path:
+                # load the model detail path
+                with open(file_path, 'r') as f:
+                    details_data = json.load(f)
+                    details = ModelDetails(**details_data)
+                
+            # load details into the func arguments (optional)
+            kwargs['details'] = details
+            
+            result = func(*args, **kwargs)
+
+            # capture model details **after** func is executed
+            reporting.capture_model_details(details)
+
+        return inner_func_wrapper
+
+    return inner_wrapper
+
+
+

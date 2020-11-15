@@ -8,6 +8,7 @@ from pandas import DataFrame
 from europy.lifecycle import reporting
 from europy.lifecycle.result import TestLabel, TestResult
 from europy.fixtures.report import report, test_result
+from europy.decorators import test
 
 @pytest.hookimpl()
 def pytest_addoption(parser):
@@ -43,12 +44,12 @@ def pytest_terminal_summary(terminalreporter, exitstatus, config):
 # @pytest.hookimpl(hookwrapper=True)
 # def pytest_pyfunc_call(pyfuncitem: Function):
 #     outcome = yield
-#
+
 #     # Will raise an error if the outcome throws
 #     result: Union[float, str, bool, DataFrame, TestResult] = outcome.get_result()
 #     marks: List[Mark] = pyfuncitem.own_markers
 #     labels: List[TestLabel] = [TestLabel.of(mark) for mark in marks]
-#
+
 #     if isinstance(result, TestResult):
 #         labels.extend(result.labels)
 #         reporting.capture(result.key, labels, result.result, result.description)

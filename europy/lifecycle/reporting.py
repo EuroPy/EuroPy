@@ -1,11 +1,14 @@
 from typing import Union, List
+import os
 
 from pandas import DataFrame
 
 from europy.lifecycle.report import Report
 from europy.lifecycle.result import TestResult, TestLabel
+from europy.lifecycle.model_details import ModelDetails
 
 report: Report = Report()
+root_report_directory = '.europy/reports'
 
 
 def get_report() -> Report:
@@ -20,8 +23,23 @@ def capture(key: str,
     report.capture(test_result)
     return test_result
 
+def capture_model_details(details: ModelDetails):
+    report.model_card['details'] = details
+
+
 
 
 def flush():
-    with open('europy_output.json', 'w') as outfile:
-        outfile.write(report.to_dictionaries())
+
+    date_str = report.timestamp.strftime('%d%m%Y_%H%M%S')
+    title = report.title.replace(' ', '_') 
+    report_directory = os.path.join(root_report_directory, f'{date_str}_{title}')
+    
+    if not os.path.exists(report_directory):
+        os.makedirs(report_directory)
+
+    
+    file_name = f'report.json'
+    file_path = os.path.join(report_directory, file_name)
+    with open(file_path, 'w') as outfile:
+        outfile.write(report.to_dictionaries(pretty=True))

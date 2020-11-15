@@ -9,6 +9,8 @@ class TestLabel(str, Enum):
     BIAS = "bias"
     DATA_BIAS = "data-bias"
     FAIRNESS = "fairness"
+    TRANSPARENCY = "transparency"
+    ACCOUNTABILITY = "accountability"
     UNIT = "unit"
     INTEGRATION = "integration"
     ACCURACY = "accuracy"
