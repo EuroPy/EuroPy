@@ -50,6 +50,18 @@ def test_fairness_example():
     return "Its Fair!"
 
 
+@transparency("Example Transparency Test")
+def test_transparency_example():
+    assert True
+    return "It's easy to understand!"
+
+
+@accountability("Example Accountability Test")
+def test_accountability_example():
+    assert True
+    return "expectations are defined!"
+
+
 # This is an example on using raw decorators
 @unit("Example Unit Test")
 def test_unit_example():

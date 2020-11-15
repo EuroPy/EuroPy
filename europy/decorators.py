@@ -56,6 +56,17 @@ def fairness(name: str = "",
 
     return decorator_factory(labels, name, description)
 
+def transparency(name: str="",
+                 description: str = ""):
+    labels: List[Union[str, TestLabel]] = [TestLabel.TRANSPARENCY]
+    
+    return decorator_factory(labels, name, description)
+
+def accountability(name: str="",
+                 description: str = ""):
+    labels: List[Union[str, TestLabel]] = [TestLabel.ACCOUNTABILITY]
+    
+    return decorator_factory(labels, name, description)
 
 def accuracy(name: str = "",
              description: str = ""):
@@ -83,6 +94,8 @@ def minimum_functionality(name: str = "",
     labels: List[Union[str, TestLabel]] = [TestLabel.MINIMUM_FUNCTIONALITY]
 
     return decorator_factory(labels, name, description)
+
+
 
 
 def modeldetails(file_path: str = None):
