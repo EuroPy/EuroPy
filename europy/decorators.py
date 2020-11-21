@@ -2,6 +2,8 @@ from functools import wraps
 from typing import Union, List
 import os
 
+import yaml
+
 from pandas import DataFrame
 
 from europy.lifecycle import reporting
@@ -97,14 +99,12 @@ def minimum_functionality(name: str = "",
 
 
 
-
 def model_details(file_path: str = None):
     """Adds a model details to the Report.
 
     Args:
         file_path (str, optional): Path to model details JSON file. Defaults to None.
     """
-    
     def inner_wrapper(func):
         @wraps(func)
         def inner_func_wrapper(*args, **kwargs):
@@ -116,7 +116,12 @@ def model_details(file_path: str = None):
             if file_path:
                 # load the model detail path
                 with open(file_path, 'r') as f:
-                    details_data = json.load(f)
+                    # load in yml or json format (to dict)
+                    if file_path.split(".")[-1] in ["yml", "yaml"]:
+                        details_data = yaml.load(f, Loader=yaml.FullLoader)
+                    else: 
+                        details_data = json.load(f)
+                    
                     details = ModelDetails(**details_data)
                 
             # load details into the func arguments (optional)

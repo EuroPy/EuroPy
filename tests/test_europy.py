@@ -94,7 +94,7 @@ def test_multiple_labels():
 
 
 @model_details('tests/model_details_example.json') # this will override the current details in the report
-def test_model_details(details: ModelDetails=None):
+def test_model_details_json(details: ModelDetails=None):
     import json
     details.description += '... this is a computed description'
 
@@ -104,9 +104,19 @@ def test_model_details(details: ModelDetails=None):
         assert loaded_details.title == details.title
         assert loaded_details.description != details.description
 
-    assert True
+@model_details('tests/model_details_example.yml')
+def test_model_details_ymal(details: ModelDetails=None):
+    import yaml
+    details.description += '... this is computed yaml description'
+
+    with open('tests/model_details_example.yml', 'r') as f:
+        loaded_details = ModelDetails(**yaml.load(f, Loader=yaml.FullLoader))
+
+        assert loaded_details.title == details.title
+        assert loaded_details.description != details.description
+
 
 # this must run in order to pass
 @model_details() # this will load the latest in the report
 def test_loaded_model_details(details: ModelDetails=None):
-    assert '... this is a computed description' in details.description
+    assert '... this is computed yaml description' in details.description
