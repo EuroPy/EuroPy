@@ -57,8 +57,9 @@ class TestPromise:
         self.func = func
 
     def merge(self, other):
-        if len(other.labels) > 0:
-            self.labels = self.labels + other.labels
+        for label in other.labels:
+            if label not in self.labels:
+                self.labels.append(label)
         if self.key is None and other.key is not None:
             self.key = other.key
         if self.description is None and other.description is not None:
