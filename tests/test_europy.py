@@ -129,3 +129,28 @@ def test_params(op1: int=None, op2: int=None, text_example: str=None, list_examp
     assert text_example != None, "text_example should be populated from params"
     assert list_example != [], "list_example should be populated from params"
     assert a_global_param != None, "a_global_param should be populated from params"
+
+
+@report_plt("example_figure")
+def test_save_image():
+    import matplotlib.pyplot as plt
+    import numpy as np
+
+    plt.style.use('fivethirtyeight')
+
+    x = np.linspace(0, 10)
+
+    # Fixing random state for reproducibility
+    np.random.seed(19680801)
+
+    fig, ax = plt.subplots()
+
+    ax.plot(x, np.sin(x) + x + np.random.randn(50))
+    ax.plot(x, np.sin(x) + 0.5 * x + np.random.randn(50))
+    ax.plot(x, np.sin(x) + 2 * x + np.random.randn(50))
+    ax.plot(x, np.sin(x) - 0.5 * x + np.random.randn(50))
+    ax.plot(x, np.sin(x) - 2 * x + np.random.randn(50))
+    ax.plot(x, np.sin(x) + np.random.randn(50))
+    ax.set_title("'fivethirtyeight' style sheet")
+
+    return plt

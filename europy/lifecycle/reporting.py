@@ -3,12 +3,16 @@ import os
 
 from pandas import DataFrame
 
+from matplotlib import pyplot
+
 from europy.lifecycle.report import Report
 from europy.lifecycle.result import TestResult, TestLabel
 from europy.lifecycle.model_details import ModelDetails
+from europy.lifecycle.report_figure import ReportFigure
 
 report: Report = Report()
 root_report_directory = '.europy/reports'
+report_directory = ""
 
 
 def get_report() -> Report:
@@ -29,19 +33,32 @@ def capture_model_details(details: ModelDetails):
 def capture_parameters(name: str, params: Dict):
     report.model_card['parameters'][name] = params
 
+def capture_figure(metadata: ReportFigure, figure: pyplot):
+    fig_rel_path = os.path.join('figures', f'{metadata.title}.png')
+    fig_path = os.path.join(report_directory, fig_rel_path)
+    
+    figure.savefig(fig_path)
+    metadata.img_path = fig_rel_path
+    
+    report.figures.append(metadata)
 
-
-
-def flush():
-
+def make_report_dir():
     date_str = report.timestamp.strftime('%d%m%Y_%H%M%S')
     title = report.title.replace(' ', '_') 
+    global report_directory
     report_directory = os.path.join(root_report_directory, f'{date_str}_{title}')
     
     if not os.path.exists(report_directory):
         os.makedirs(report_directory)
-
     
+    img_dir = os.path.join(report_directory, 'figures')
+    if not os.path.exists(img_dir):
+        os.makedirs(img_dir)
+
+make_report_dir()
+
+
+def flush():
     file_name = f'report.json'
     file_path = os.path.join(report_directory, file_name)
     with open(file_path, 'w') as outfile:

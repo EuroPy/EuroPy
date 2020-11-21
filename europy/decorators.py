@@ -192,6 +192,33 @@ def using_params(file_path: str, report=True):
                 reporting.capture_parameters(func_name, kwargs)
                 
         return inner_func_wrapper
+    
     return inner_wrapper
 
+
+def report_plt(name: str = None):
+    def inner_warpper(func):
+        @wraps(func)
+        def inner_func_wrapper(*args, **kwargs):
+            from europy.lifecycle.report_figure import ReportFigure
+            from europy.lifecycle.reporting import report_directory
+
+            func_spec = inspect.getfullargspec(func)
+            metadata = ReportFigure(title=name)
+            if 'img_metadata' in func_spec.args:
+                kwargs['img_metadata'] = metadata
+                plt, metadata = func(*args, **kwargs)
+            else:
+                plt = func(*args, **kwargs)
+
+            reporting.capture_figure(metadata, plt)
+        
+        return inner_func_wrapper
+    
+    return inner_warpper
+        
+
+            
+            
+            
 
