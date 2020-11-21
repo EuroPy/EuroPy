@@ -1,4 +1,4 @@
-from typing import Union, List
+from typing import Union, List, Dict
 import os
 
 from pandas import DataFrame
@@ -25,6 +25,9 @@ def capture(key: str,
 
 def capture_model_details(details: ModelDetails):
     report.model_card['details'] = details
+
+def capture_parameters(name: str, params: Dict):
+    report.model_card['parameters'][name] = params
 
 
 

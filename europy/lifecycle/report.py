@@ -31,7 +31,9 @@ class Report:
         self.test_results: dict = dict()
         self.model_card: dict = dict()
 
+        # TODO: make ModelCard class
         self.model_card['details'] = ModelDetails(title=title)
+        self.model_card['parameters'] = {}
 
         self.timestamp = datetime.now()
 

@@ -2,8 +2,6 @@ from functools import wraps
 from typing import Union, List
 import os
 
-import yaml
-
 from pandas import DataFrame
 
 from europy.lifecycle import reporting
@@ -108,7 +106,7 @@ def model_details(file_path: str = None):
     def inner_wrapper(func):
         @wraps(func)
         def inner_func_wrapper(*args, **kwargs):
-            import json
+            import json, yaml
         
             # pull current report (generated @ __init__)
             details = reporting.get_report().model_card['details']
@@ -117,7 +115,7 @@ def model_details(file_path: str = None):
                 # load the model detail path
                 with open(file_path, 'r') as f:
                     # load in yml or json format (to dict)
-                    if file_path.split(".")[-1] in ["yml", "yaml"]:
+                    if os.path.split(file_path)[-1].split('.')[-1] in ["yml", "yaml"]:
                         details_data = yaml.load(f, Loader=yaml.FullLoader)
                     else: 
                         details_data = json.load(f)
@@ -136,5 +134,37 @@ def model_details(file_path: str = None):
 
     return inner_wrapper
 
+
+def using_params(file_path: str):
+    def inner_wrapper(func):
+        @wraps(func)
+        def inner_func_wrapper(*args, **kwargs):
+            import json, yaml
+            
+            func_name = func.__name__
+            
+            file_name = os.path.split(file_path)[0]
+            params = reporting.get_report().model_card['parameters'].get(func_name, {})
+
+            with open(file_path, 'r') as f:
+                if os.path.split(file_path)[-1].split('.')[-1] in ["yml", "yaml"]:
+                    params = yaml.load(f, Loader=yaml.FullLoader)
+                else: 
+                    params = json.load(f)
+                
+            for (key, value) in params.items():
+                if key.split(".")[0] == func_name:
+                    kwargs[key.split(".")[-1]] = value
+            
+            result = func(*args, **kwargs)
+
+            """ may want to name it something other than the function name
+                maybe try to pull a key from the doc string first, or
+                give a special key in yaml
+            """
+            reporting.capture_parameters(func_name, kwargs)
+                
+        return inner_func_wrapper
+    return inner_wrapper
 
 

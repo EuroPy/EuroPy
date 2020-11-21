@@ -120,3 +120,11 @@ def test_model_details_ymal(details: ModelDetails=None):
 @model_details() # this will load the latest in the report
 def test_loaded_model_details(details: ModelDetails=None):
     assert '... this is computed yaml description' in details.description
+
+
+@using_params('tests/param_example.yml')
+def test_params(op1: int=None, op2: int=None, text_example: str=None, list_example: List[float]=[]):
+    assert op1 != None, "op1 should be populated from params"
+    assert op2 != None, "op1 should be populated from params"
+    assert text_example != None, "text_example should be populated from params"
+    assert list_example != [], "list_example should be populated from params"
