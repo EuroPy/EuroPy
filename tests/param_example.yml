@@ -1,3 +1,4 @@
+a_global_param: 1e-6
 test_params.op1: 4
 test_params.op2: 3
 test_params.text_example: "some text"

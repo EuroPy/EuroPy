@@ -123,8 +123,9 @@ def test_loaded_model_details(details: ModelDetails=None):
 
 
 @using_params('tests/param_example.yml')
-def test_params(op1: int=None, op2: int=None, text_example: str=None, list_example: List[float]=[]):
+def test_params(op1: int=None, op2: int=None, text_example: str=None, list_example: List[float]=[], a_global_param=None):
     assert op1 != None, "op1 should be populated from params"
     assert op2 != None, "op1 should be populated from params"
     assert text_example != None, "text_example should be populated from params"
     assert list_example != [], "list_example should be populated from params"
+    assert a_global_param != None, "a_global_param should be populated from params"
