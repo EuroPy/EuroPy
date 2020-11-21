@@ -111,6 +111,8 @@ def model_details(file_path: str = None):
         
             # pull current report (generated @ __init__)
             details = reporting.get_report().model_card['details']
+
+            func_spec = inspect.getfullargspec(func)
             
             if file_path:
                 # load the model detail path
@@ -124,12 +126,15 @@ def model_details(file_path: str = None):
                     details = ModelDetails(**details_data)
                 
             # load details into the func arguments (optional)
-            kwargs['details'] = details
+            if 'details' in func_spec.args:
+                kwargs['details'] = details
             
             result = func(*args, **kwargs)
 
             # capture model details **after** func is executed
             reporting.capture_model_details(details)
+
+            return result
 
         return inner_func_wrapper
 
@@ -163,7 +168,7 @@ def using_params(file_path: str, report=True):
             if report:
                 params = reporting.get_report().model_card['parameters'].get(func_name, {})
             else:
-                param = False
+                params = {}
 
             with open(file_path, 'r') as f:
                 if os.path.split(file_path)[-1].split('.')[-1] in ['yml', 'yaml']:
@@ -171,16 +176,15 @@ def using_params(file_path: str, report=True):
                 else: 
                     params = json.load(f)
                 
-            for (key, value) in params.items():
-                key_split = key.split('.')
-
-                # global params
+            # global params
+            for (key, value) in params.get('global', {}).items():
                 if key in func_spec.args:
                     kwargs[key] = value
-                
-                # func specific params
-                if key_split[0] == func_name and key_split[-1] in func_spec.args:
-                    kwargs[key_split[-1]] = value
+            
+            # func specific params
+            for (key, value) in params.get(func_name, {}).items():
+                if key in func_spec.args:
+                    kwargs[key] = value
             
             result = func(*args, **kwargs)
 
@@ -189,7 +193,9 @@ def using_params(file_path: str, report=True):
                 give a special key in yaml
             """
             if report:
-                reporting.capture_parameters(func_name, kwargs)
+                reporting.capture_parameters(func_name, kwargs)\
+            
+            return result
                 
         return inner_func_wrapper
     
@@ -212,6 +218,8 @@ def report_plt(name: str = None):
                 plt = func(*args, **kwargs)
 
             reporting.capture_figure(metadata, plt)
+
+            return plt, metadata
         
         return inner_func_wrapper
     

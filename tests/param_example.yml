@@ -1,11 +1,15 @@
-a_global_param: 1e-6
-test_params.op1: 4
-test_params.op2: 3
-test_params.text_example: "some text"
-test_params.list_example:
-  - 1.2
-  - 1.3
-  - 1.4
-  - 1.5
+global:
+  a_global_param: 1e-6
 
-not_test_params.title: "something that is not included"
+test_params:
+  op1: 4
+  op2: 3
+  text_example: "some text"
+  list_example:
+    - 1.2
+    - 1.3
+    - 1.4
+    - 1.5
+
+not_test_params:
+  title: "something that is not included"

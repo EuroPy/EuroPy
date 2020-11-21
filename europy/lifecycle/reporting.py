@@ -31,7 +31,8 @@ def capture_model_details(details: ModelDetails):
     report.model_card['details'] = details
 
 def capture_parameters(name: str, params: Dict):
-    report.model_card['parameters'][name] = params
+    # combine parameters
+    report.model_card['parameters'][name] = {**report.model_card['parameters'].get(name, {}), **params}
 
 def capture_figure(metadata: ReportFigure, figure: pyplot):
     fig_rel_path = os.path.join('figures', f'{metadata.title}.png')
