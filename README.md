@@ -41,8 +41,50 @@ execute_tests(100)
 TODO: Fill me in after this is incorporated
 
 ## Model Card
+EuroPy can also help with generating high level details of your model for use in the report. This is included with the `@model_details()` decorator which reads data from `.yaml` or `.json` file. An example can be found at `tests/model_details_example.[yml|json]`.
 
-TODO: Help fill me in @blaine
+### Simple Model Card Example
+```python
+@model_details('model_details.yml') # will load details from file and pass into train
+def train(details: ModelDetails=None):
+    # train
+    details.description = "something computed"
+
+@model_details() # will load existing details from the current report
+def test(detail: ModelDetails=None):
+    pass
+```
+
+## Hyper-Parameters
+Keeping track of hyper-parameter tuning can be accomplished in configuration `.yml` or `.json` files and loaded into your code with the decorator `using_params()` or globally with `load_global_params()`. Doing so will automatically add the parameter details to your report. Parameters are loaded from 
+
+### Example Param Usage
+```yaml
+global:
+    num_epochs: 4
+    batch_size: 128
+    learning_rate: 0.0001
+train: 
+    test_split: 0.2
+test:
+    title: "Testing Run 01"
+    batch_size: 256
+```
+```python
+@using_params('params.yml')
+def train(num_epochs: int=None, batch_size: int=None, learning_rate: float=None, test_split: float=None):
+    # will load global params first, then params matching func name
+    pass
+
+@using_params('params.yml')
+def test(title: str="", batch_size: int=None):
+    # will load batch_size from test, overriding the global definition
+    pass 
+```
+
+### Example Notebook Output
+![Global Params Output](./.img/global_params_notebook.png)
+![Function Params Capture](./.img/func_params_notebook.png)
 
 
 ## Test Decorators
