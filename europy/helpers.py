@@ -1,4 +1,4 @@
-import os, yaml
+import os, yaml, json
 from europy.lifecycle import reporting
 
 def load_global_params(path, report=True):
