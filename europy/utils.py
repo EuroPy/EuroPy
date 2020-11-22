@@ -1,7 +1,17 @@
 import os, yaml, json
+from typing import Dict, Any
 from europy.lifecycle import reporting
 
-def load_global_params(path, report=True):
+def load_global_params(path: str, report=True) -> Dict[str:Any]:
+    """Load and return global paramss
+
+    Args:
+        path (str): path to param file
+        report (bool, optional): Add params to EuroPy report. Defaults to True.
+
+    Returns:
+        Dict[str:Any]: global params
+    """
     
     params = {}
     with open(path, 'r') as f:
