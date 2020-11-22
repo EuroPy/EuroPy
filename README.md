@@ -80,8 +80,6 @@ While we believe these decorators should be comprehensive we have provided two w
     from europy.decorators import decorator_factory
     from europy.lifecycle.reporting import execute_tests
 
-    EXAMPLE_LABEL_NAME = "end-to-end"
-
     def end_to_end(name: str = ""):
         # here you can add multiple labels if you wish
         labels = ["end-to-end"]
