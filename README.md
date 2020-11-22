@@ -59,7 +59,7 @@ EuroPy supports a number of test classes out of the box. These test classes have
 - `@minimum_functionality()`
 
 ### Custom Test Decorators
-While we believe these decorators should be comprehensive we have provided two ways in which you can add your own custom label to the test reports. For the examples below we will be adding a custom "end_to_end" testing label to our testing function. 
+While we believe these decorators should be comprehensive we have provided two ways in which you can add your own custom label to the test reports. For the examples below we will be adding a custom "end-to-end" testing label to our testing function. 
 
 - Using the  generic `@test()` decorator you can provide a custom string label
     ```python
