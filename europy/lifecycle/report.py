@@ -2,6 +2,7 @@ import json
 from typing import Union, Optional
 from datetime import datetime
 from europy.lifecycle.model_details import ModelDetails
+from europy.lifecycle.report_figure import ReportFigure
 
 from pandas import DataFrame
 
@@ -20,6 +21,8 @@ class Encoder(json.JSONEncoder):
             return obj.__dict__
         if isinstance(obj, TestResult):
             return obj.__dict__
+        if isinstance(obj, ReportFigure):
+            return obj.__dict__
         if isinstance(obj, datetime):
             return str(obj)
         return json.JSONEncoder.default(self, obj)
@@ -30,10 +33,14 @@ class Report:
         self.title = title
         self.test_results: dict = dict()
         self.model_card: dict = dict()
+        self.figures: [ReportFigure] = []
 
+        # TODO: make ModelCard class
         self.model_card['details'] = ModelDetails(title=title)
+        self.model_card['parameters'] = {}
 
         self.timestamp = datetime.now()
+
 
     def to_dictionaries(self, pretty: bool=False):
         indent = 4 if pretty else None

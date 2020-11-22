@@ -94,7 +94,7 @@ def test_multiple_labels():
 
 
 @model_details('tests/model_details_example.json') # this will override the current details in the report
-def test_model_details(details: ModelDetails=None):
+def test_model_details_json(details: ModelDetails=None):
     import json
     details.description += '... this is a computed description'
 
@@ -104,9 +104,53 @@ def test_model_details(details: ModelDetails=None):
         assert loaded_details.title == details.title
         assert loaded_details.description != details.description
 
-    assert True
+@model_details('tests/model_details_example.yml')
+def test_model_details_yaml(details: ModelDetails=None):
+    import yaml
+    details.description += '... this is computed yaml description'
+
+    with open('tests/model_details_example.yml', 'r') as f:
+        loaded_details = ModelDetails(**yaml.load(f, Loader=yaml.FullLoader))
+
+        assert loaded_details.title == details.title
+        assert loaded_details.description != details.description
+
 
 # this must run in order to pass
 @model_details() # this will load the latest in the report
 def test_loaded_model_details(details: ModelDetails=None):
-    assert '... this is a computed description' in details.description
+    assert '... this is computed yaml description' in details.description
+
+
+@using_params('tests/param_example.yml')
+def test_params(op1: int=None, op2: int=None, text_example: str=None, list_example: List[float]=[], a_global_param=None):
+    assert op1 != None, "op1 should be populated from params"
+    assert op2 != None, "op1 should be populated from params"
+    assert text_example != None, "text_example should be populated from params"
+    assert list_example != [], "list_example should be populated from params"
+    assert a_global_param != None, "a_global_param should be populated from params"
+
+
+@report_plt("example_figure")
+def test_save_image():
+    import matplotlib.pyplot as plt
+    import numpy as np
+
+    plt.style.use('fivethirtyeight')
+
+    x = np.linspace(0, 10)
+
+    # Fixing random state for reproducibility
+    np.random.seed(19680801)
+
+    fig, ax = plt.subplots()
+
+    ax.plot(x, np.sin(x) + x + np.random.randn(50))
+    ax.plot(x, np.sin(x) + 0.5 * x + np.random.randn(50))
+    ax.plot(x, np.sin(x) + 2 * x + np.random.randn(50))
+    ax.plot(x, np.sin(x) - 0.5 * x + np.random.randn(50))
+    ax.plot(x, np.sin(x) - 2 * x + np.random.randn(50))
+    ax.plot(x, np.sin(x) + np.random.randn(50))
+    ax.set_title("'fivethirtyeight' style sheet")
+
+    return plt
