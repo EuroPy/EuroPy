@@ -105,7 +105,7 @@ def test_model_details_json(details: ModelDetails=None):
         assert loaded_details.description != details.description
 
 @model_details('tests/model_details_example.yml')
-def test_model_details_ymal(details: ModelDetails=None):
+def test_model_details_yaml(details: ModelDetails=None):
     import yaml
     details.description += '... this is computed yaml description'
 
