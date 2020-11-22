@@ -194,14 +194,20 @@ def using_params(file_path: str, report=True):
                 else: 
                     params = json.load(f)
                 
+            
             # global params
+            global_loaded_params = {}
             for (key, value) in params.get('global', {}).items():
                 if key in func_spec.args:
+                    global_loaded_params[key] = value
                     kwargs[key] = value
+
             
             # func specific params
+            func_loaded_params = {}
             for (key, value) in params.get(func_name, {}).items():
                 if key in func_spec.args:
+                    func_loaded_params[key] = value
                     kwargs[key] = value
             
             result = func(*args, **kwargs)
@@ -211,7 +217,13 @@ def using_params(file_path: str, report=True):
                 give a special key in yaml
             """
             if report:
-                reporting.capture_parameters(func_name, kwargs)\
+                reporting.capture_parameters(func_name, kwargs)
+                if isnotebook():
+                    print(f"========= EuroPy Captured Params: ({func_name}) =========")
+                    for (key, value) in global_loaded_params.items():
+                        print(f'  - global.{key}: {value}')
+                    for (key, value) in func_loaded_params.items():
+                        print(f'  - {func_name}.{key}: {value}')
             
             return result
                 
@@ -220,11 +232,12 @@ def using_params(file_path: str, report=True):
     return inner_wrapper
 
 
-def report_plt(name: str = None):
+def report_plt(name: str = None, report=True):
     """Adds a figure to the report
 
     Args:
         name (str, optional): name of the figure. Defaults to None.
+        report (bool, optional): should include in model card report. Defaults to True.
     """
     
     def inner_warpper(func):
@@ -242,7 +255,12 @@ def report_plt(name: str = None):
             else:
                 plt = func(*args, **kwargs)
 
-            reporting.capture_figure(metadata, plt)
+            if report:
+                reporting.capture_figure(metadata, plt)
+                if isnotebook():
+                    print(f"========= EuroPy Figure Capture: ({name}) =========")
+                    print(metadata)
+                    plt.show()
 
             return plt, metadata
         
