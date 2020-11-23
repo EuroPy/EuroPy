@@ -6,6 +6,8 @@ from typing import Union, List, Tuple, Type
 from _pytest.mark import Mark
 from pandas import DataFrame
 
+from europy.lifecycle.markdowner import writeMD
+
 
 class TestLabel(str, Enum):
     BIAS = "bias"
@@ -43,6 +45,11 @@ class TestResult:
         self.labels = labels
         self.result = result
         self.success = success
+
+    def to_markdown(self):
+        indent = 4
+        return writeMD(json.dumps(self, cls=Encoder, indent=indent),
+                       'results')  # this is work in progress please dont judge :P, will discuss further to iron this out in the call
 
 
 class TestPromise:
