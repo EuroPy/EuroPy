@@ -1,8 +1,9 @@
 import os, yaml, json
 from typing import Dict, Any
 from europy.lifecycle import reporting
+from europy.decorators import isnotebook
 
-def load_global_params(path: str, report=True) -> Dict[str:Any]:
+def load_global_params(path: str, report=True):
     """Load and return global paramss
 
     Args:
@@ -25,5 +26,9 @@ def load_global_params(path: str, report=True) -> Dict[str:Any]:
     
     if report:
         reporting.capture_parameters('global', global_params)
-    
+        if isnotebook():
+            print(f"========= EuroPy Captured Params: (global) =========")
+            for (key, value) in global_params.items():
+                print(f'  - global.{key}: {value}')
+
     return global_params

@@ -1,5 +1,5 @@
 global:
-  a_global_param: 1e-6
+  a_global_param: 0.000001
 
 test_params:
   op1: 4

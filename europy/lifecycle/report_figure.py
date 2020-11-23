@@ -4,3 +4,9 @@ class ReportFigure:
         self.title = title
         self.description = description
         self.tag = tag
+
+    def __str__(self):
+        return f'ReportFigure(\n\ttitle: {self.title},\n\tdescription: {self.description},\n\ttag: {self.tag}\n)'
+    
+    def __repr__(self):
+        return f'ReportFigure(title: {self.title}, description: {self.description}, tag: {self.tag})'

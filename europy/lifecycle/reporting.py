@@ -67,7 +67,8 @@ def make_report_dir():
     
     if not os.path.exists(report_directory):
         os.makedirs(report_directory)
-        img_dir = os.path.join(report_directory, 'figures')
+    
+    img_dir = os.path.join(report_directory, 'figures')
     if not os.path.exists(img_dir):
         os.makedirs(img_dir)
 
