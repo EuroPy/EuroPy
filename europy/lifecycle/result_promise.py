@@ -1,5 +1,5 @@
 import sys
-from typing import List, Union, Dict
+from typing import List, Union, Dict, Tuple
 from pandas import DataFrame
 
 from europy.lifecycle.report_figure import ReportFigure
