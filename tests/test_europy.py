@@ -1,4 +1,7 @@
 from pandas import DataFrame
+import matplotlib
+from matplotlib import pyplot
+from typing import Dict
 
 import europy
 from europy.lifecycle.result import TestResult, TestLabel
@@ -17,6 +20,29 @@ def custom_decorator(name: str = ""):
 
 
 df = DataFrame([[1, 2], [3, 4]], columns=['odds', 'evens'])
+
+def sample_plot(title: str):
+    import matplotlib.pyplot as plt
+    import numpy as np
+
+    plt.style.use('fivethirtyeight')
+
+    x = np.linspace(0, 10)
+
+    # Fixing random state for reproducibility
+    np.random.seed(19680801)
+
+    fig, ax = plt.subplots()
+
+    ax.plot(x, np.sin(x) + x + np.random.randn(50))
+    ax.plot(x, np.sin(x) + 0.5 * x + np.random.randn(50))
+    ax.plot(x, np.sin(x) + 2 * x + np.random.randn(50))
+    ax.plot(x, np.sin(x) - 0.5 * x + np.random.randn(50))
+    ax.plot(x, np.sin(x) - 2 * x + np.random.randn(50))
+    ax.plot(x, np.sin(x) + np.random.randn(50))
+    ax.set_title(title)
+
+    return plt
 
 
 # This is how you can create your own labels on the fly
@@ -53,8 +79,9 @@ def test_fairness_example():
 
 
 @transparency("Example Transparency Test")
-def test_transparency_example():
+def test_transparency_example(plots={}):
     assert True
+    plots["transparency"] = sample_plot("transparency")
     return "It's easy to understand!"
 
 
@@ -133,24 +160,4 @@ def test_params(op1: int=None, op2: int=None, text_example: str=None, list_examp
 
 @report_plt("example_figure")
 def test_save_image():
-    import matplotlib.pyplot as plt
-    import numpy as np
-
-    plt.style.use('fivethirtyeight')
-
-    x = np.linspace(0, 10)
-
-    # Fixing random state for reproducibility
-    np.random.seed(19680801)
-
-    fig, ax = plt.subplots()
-
-    ax.plot(x, np.sin(x) + x + np.random.randn(50))
-    ax.plot(x, np.sin(x) + 0.5 * x + np.random.randn(50))
-    ax.plot(x, np.sin(x) + 2 * x + np.random.randn(50))
-    ax.plot(x, np.sin(x) - 0.5 * x + np.random.randn(50))
-    ax.plot(x, np.sin(x) - 2 * x + np.random.randn(50))
-    ax.plot(x, np.sin(x) + np.random.randn(50))
-    ax.set_title("'fivethirtyeight' style sheet")
-
-    return plt
+    return sample_plot('standalone figure')
