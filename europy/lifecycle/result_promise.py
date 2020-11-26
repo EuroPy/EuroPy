@@ -1,4 +1,6 @@
+import sys
 from typing import List, Union, Dict
+from pandas import DataFrame
 
 from europy.lifecycle.report_figure import ReportFigure
 from europy.lifecycle.report import TestResult, TestLabel
@@ -28,7 +30,7 @@ class TestPromise:
         try:
             
             plots = {}
-            if "plots" in kwargs.keys:
+            if "plots" in kwargs.keys():
                 kwargs["plots"] = plots
             
             result: Union[float, str, bool, DataFrame] = self.func(*args, **kwargs)
