@@ -1,9 +1,11 @@
 import sys
-from typing import List, Union, Dict, Tuple
+from typing import List, Union, Tuple, Type
+from types import TracebackType
 from pandas import DataFrame
 
 from europy.lifecycle.report_figure import ReportFigure
 from europy.lifecycle.report import TestResult, TestLabel
+
 
 class TestPromise:
     def __init__(self,
