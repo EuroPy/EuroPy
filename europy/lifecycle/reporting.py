@@ -6,17 +6,16 @@ from pandas import DataFrame
 
 from matplotlib import pyplot
 
+from europy import report_directory, root_report_directory
 from europy.lifecycle.report import Report
 from europy.lifecycle.model_details import ModelDetails
 from europy.lifecycle.report_figure import ReportFigure
-from europy.lifecycle.result import TestResult, TestLabel, TestPromise
-
-report: Report = Report()
-root_report_directory = '.europy/reports'
-report_directory = ""
+from europy.lifecycle.result import TestResult, TestLabel
+from europy.lifecycle.result_promise import TestPromise
 
 tests: dict = dict()
 
+report=Report()
 
 def put_test(promise: TestPromise):
     key = str(promise.func.__name__)
@@ -35,9 +34,10 @@ def get_report() -> Report:
 def capture(key: str,
             labels: List[Union[str, TestLabel]],
             result: Union[float, str, bool, DataFrame, TestResult],
+            figures: [ReportFigure] = [],
             description: str = None,
             success: bool = None) -> TestResult:
-    test_result = TestResult(key, labels, result, description, success)
+    test_result = TestResult(key, labels, result, figures, description, success)
     report.capture(test_result)
     return test_result
 
@@ -49,22 +49,12 @@ def capture_parameters(name: str, params: Dict):
     # combine parameters
     report.model_card['parameters'][name] = {**report.model_card['parameters'].get(name, {}), **params}
 
-def capture_figure(metadata: ReportFigure, figure: pyplot):
-    fig_rel_path = os.path.join('figures', f'{metadata.title}.png')
-    fig_path = os.path.join(report_directory, fig_rel_path)
-    
-    figure.savefig(fig_path)
-    metadata.img_path = fig_rel_path
+def capture_figure(name: str, plot: pyplot):
+    metadata = ReportFigure.of(name, plot)
     
     report.figures.append(metadata)
 
 def make_report_dir():
-    date_str = report.timestamp.strftime('%d%m%Y_%H%M%S')
-    title = report.title.replace(' ', '_') 
-    
-    global report_directory
-    report_directory = os.path.join(root_report_directory, f'{date_str}_{title}')
-    
     if not os.path.exists(report_directory):
         os.makedirs(report_directory)
     

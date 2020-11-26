@@ -1,3 +1,8 @@
+import os
+from matplotlib import pyplot
+
+from europy import report_directory
+
 class ReportFigure:
     def __init__(self, img_path=None, title=None, description=None, tag=None):
         self.img_path = img_path
@@ -10,3 +15,16 @@ class ReportFigure:
     
     def __repr__(self):
         return f'ReportFigure(title: {self.title}, description: {self.description}, tag: {self.tag})'
+
+
+    @staticmethod
+    def of(name: str, plot: pyplot):
+        report_figure = ReportFigure()
+        fig_rel_path = os.path.join('figures', f'{name}.png')
+        fig_path = os.path.join(report_directory, fig_rel_path)
+        
+        plot.savefig(fig_path)
+        report_figure.img_path = fig_rel_path
+        report_figure.title = name
+        
+        return report_figure

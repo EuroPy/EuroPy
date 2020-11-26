@@ -8,7 +8,9 @@ from pandas import DataFrame
 from europy.lifecycle import reporting
 from europy.lifecycle.model_details import ModelDetails
 from europy.lifecycle.reporting import put_test
-from europy.lifecycle.result import TestLabel, TestResult, TestPromise
+from europy.lifecycle.result import TestLabel, TestResult
+from europy.lifecycle.result_promise import TestPromise
+from europy.lifecycle.report_figure import ReportFigure
 
 
 def isnotebook():
@@ -28,13 +30,26 @@ def decorator_factory(labels: List[Union[str, TestLabel]],
 
         @wraps(func)
         def func_wrapper(*args, **kwargs):
+            func_spec = inspect.getfullargspec(func)
+            
+            plots = {}
+            if "plots" in func_spec.args:
+                kwargs["plots"] = plots
+            
             result: Union[float, str, bool, DataFrame, TestResult] = func(*args, **kwargs)
 
             if not isinstance(result, TestResult):
                 # labels.extend(result.labels)
                 # return reporting.capture(result.key, labels, result.result, result.description)
                 # else:
-                return reporting.capture(name, labels, result, description)
+                return reporting.capture(
+                    name, 
+                    labels, 
+                    result, 
+                    [ReportFigure.of(name, plot) for name, plot in plots.items()],
+                    description, 
+                    False
+                )
 
         return func if isnotebook() else func_wrapper
 
@@ -248,21 +263,15 @@ def report_plt(name: str = None, report=True):
             from europy.lifecycle.reporting import report_directory
 
             func_spec = inspect.getfullargspec(func)
-            metadata = ReportFigure(title=name)
-            if 'img_metadata' in func_spec.args:
-                kwargs['img_metadata'] = metadata
-                plt, metadata = func(*args, **kwargs)
-            else:
-                plt = func(*args, **kwargs)
+            plt = func(*args, **kwargs)
 
             if report:
-                reporting.capture_figure(metadata, plt)
+                reporting.capture_figure(name, plt)
                 if isnotebook():
                     print(f"========= EuroPy Figure Capture: ({name}) =========")
-                    print(metadata)
                     plt.show()
 
-            return plt, metadata
+            return plt
         
         return inner_func_wrapper
     
