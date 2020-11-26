@@ -27,7 +27,7 @@ class TestPromise:
         print(f"Execute - {self.key} ({self.labels})")
         try:
             
-            plots: Dict[str,pyplot] = {}
+            plots = {}
             if "plots" in kwargs.keys:
                 kwargs["plots"] = plots
             
