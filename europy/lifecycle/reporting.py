@@ -74,6 +74,12 @@ def execute_tests(*args, **kwargs):
 
     passing_count = len(list(filter(lambda x: x.success, test_results)))
     failing_count = len(list(filter(lambda x: not x.success, test_results)))
+
+    file_name = f'report.json'
+    file_path = os.path.join(report_directory, file_name)
+    with open(file_path, 'w') as outfile:
+        outfile.write(report.to_dictionaries(pretty=True))
+
     print("========= EuroPy Test Results =========")
     print(f"Total Tests: {len(test_results)}")
     print(f"Passing: {passing_count}")
