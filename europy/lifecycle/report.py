@@ -1,6 +1,8 @@
 import json
 from typing import Union, Optional
 from datetime import datetime
+
+from europy.lifecycle.markdowner import Markdown
 from europy.lifecycle.model_details import ModelDetails
 from europy.lifecycle.report_figure import ReportFigure
 
@@ -41,8 +43,18 @@ class Report:
 
         self.timestamp = datetime.now()
 
+    def to_markdown(self):
+        markdownReport = Markdown()
+        markdownReport.add_header(self.title)
+        markdownReport.add_horizontal_rule()
+        markdownReport.add_blockquote(self.model_card)
+        markdownReport.add_horizontal_rule()
+        markdownReport.add_header('Test Results')
+        markdownReport.add_blockquote(self.test_results)
+        markdownReport.add_image(self.figures)  # needs image path url and text
+        markdownReport.save('result.md')
 
-    def to_dictionaries(self, pretty: bool=False):
+    def to_dictionaries(self, pretty: bool = False):
         indent = 4 if pretty else None
         return json.dumps(self, cls=Encoder, indent=indent)
 
