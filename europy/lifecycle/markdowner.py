@@ -78,9 +78,15 @@ class Markdown:
 
     def add_dict_content(self, data):
         depth = 0
-        dict_content = self.parseInputData(data, depth)
-        self.content += dict_content
+        self.content += "\n"
+        self.parseInputData(data, depth)
+        self.content += self.getClassMarkdownData()
+        self.content += "\n"
         return self
+
+    @classmethod
+    def getClassMarkdownData(cls):
+        return cls.cls_dict_markdown
 
     @classmethod
     def parseInputData(cls, data, depth):
@@ -88,10 +94,9 @@ class Markdown:
             cls.parseDict(data, depth)
         if isinstance(data, list):
             cls.parseList(data, depth)
-        return cls.cls_dict_markdown
 
     @classmethod
-    def parseDict(cls, d, depth, markdown):
+    def parseDict(cls, d, depth):
         for k in d:
             if isinstance(d[k], (dict, list)):
                 cls.addHeader(k, depth)
@@ -100,7 +105,7 @@ class Markdown:
                 cls.addValue(k, d[k], depth)
 
     @classmethod
-    def parseList(cls, lis, depth, markdown):
+    def parseList(cls, lis, depth):
         for value in lis:
             if not isinstance(value, (dict, list)):
                 index = lis.index(value)
@@ -109,12 +114,12 @@ class Markdown:
                 cls.parseDict(value, depth)
 
     @classmethod
-    def addHeader(cls, value, depth, mark):
+    def addHeader(cls, value, depth):
         chain = cls.buildHeaderChain(depth)
         cls.cls_dict_markdown += chain.replace('value', value.title())
 
     @classmethod
-    def addValue(cls, key, value, depth, mark):
+    def addValue(cls, key, value, depth):
         chain = cls.buildValueChain(key, value, depth)
         cls.cls_dict_markdown += chain
 
