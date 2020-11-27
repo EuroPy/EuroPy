@@ -1,21 +1,22 @@
-from typing import Union, List, Dict
 import os
+from typing import Dict
 from typing import Union, List
 
+from matplotlib import pyplot
 from pandas import DataFrame
 
-from matplotlib import pyplot
-
-from europy import report_directory, root_report_directory
-from europy.lifecycle.report import Report
+from europy import report_directory
 from europy.lifecycle.model_details import ModelDetails
+from europy.lifecycle.report import Report
 from europy.lifecycle.report_figure import ReportFigure
 from europy.lifecycle.result import TestResult, TestLabel
 from europy.lifecycle.result_promise import TestPromise
+from europy.utils import isnotebook
 
 tests: dict = dict()
 
-report=Report()
+report = Report()
+
 
 def put_test(promise: TestPromise):
     key = str(promise.func.__name__)
@@ -45,33 +46,29 @@ def capture(key: str,
 def capture_model_details(details: ModelDetails):
     report.model_card['details'] = details
 
+
 def capture_parameters(name: str, params: Dict):
     # combine parameters
     report.model_card['parameters'][name] = {**report.model_card['parameters'].get(name, {}), **params}
 
+
 def capture_figure(name: str, plot: pyplot):
     metadata = ReportFigure.of(name, plot)
-    
+
     report.figures.append(metadata)
+
 
 def make_report_dir():
     if not os.path.exists(report_directory):
         os.makedirs(report_directory)
-    
+
     img_dir = os.path.join(report_directory, 'figures')
     if not os.path.exists(img_dir):
         os.makedirs(img_dir)
 
-make_report_dir()
-
-def flush():
-    file_name = f'report.json'
-    file_path = os.path.join(report_directory, file_name)
-    with open(file_path, 'w') as outfile:
-        outfile.write(report.to_dictionaries(pretty=True))
-
 
 def execute_tests(*args, **kwargs):
+    make_report_dir()
     test_results: List[TestResult] = [tests[key].execute(*args, **kwargs) for key in tests.copy()]
     test_result_df = DataFrame([x.__dict__ for x in test_results])
 
@@ -82,4 +79,4 @@ def execute_tests(*args, **kwargs):
     print(f"Passing: {passing_count}")
     print(f"Failing: {failing_count}")
 
-    return DataFrame(test_result_df)
+    return DataFrame(test_result_df) if isnotebook() else test_results

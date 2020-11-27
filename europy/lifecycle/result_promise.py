@@ -1,10 +1,11 @@
 import sys
-from typing import List, Union, Tuple, Type
 from types import TracebackType
+from typing import List, Union, Tuple, Type
+
 from pandas import DataFrame
 
-from europy.lifecycle.report_figure import ReportFigure
 from europy.lifecycle.report import TestResult, TestLabel
+from europy.lifecycle.report_figure import ReportFigure
 
 
 class TestPromise:
@@ -30,11 +31,11 @@ class TestPromise:
     def execute(self, *args, **kwargs) -> TestResult:
         print(f"Execute - {self.key} ({self.labels})")
         try:
-            
+
             plots = {}
             if "plots" in kwargs.keys():
                 kwargs["plots"] = plots
-            
+
             result: Union[float, str, bool, DataFrame] = self.func(*args, **kwargs)
             print(f"\tPASS")
 

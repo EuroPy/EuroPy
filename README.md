@@ -12,7 +12,7 @@ TODO: Fill this in
 Creating a test function is accmplished by simply decorating any function with decorators from `europy.decorators`. This will register your test function with the EuroPy lifecycle. In order to execute all registered tests you simply need to execute the `europy.lifecycle.reporting.execute_tests` function. Any parameters passed to the `execute_tests` function will also be passed to all registered functions. 
 
 ```python
-from europy.decorators import bias, fairness
+from europy.decorator import bias, fairness
 from europy.lifecycle.reporting import execute_tests
 
 @bias("My example bias test", "Lorem ipsum dolor sit amet, consectetur adipiscing elit.")
@@ -105,7 +105,7 @@ While we believe these decorators should be comprehensive we have provided two w
 
 - Using the  generic `@test()` decorator you can provide a custom string label
     ```python
-    from europy.decorators import test
+    from europy.decorator import test
     from europy.lifecycle.reporting import execute_tests
 
     EXAMPLE_LABEL_NAME = "end-to-end"
@@ -119,7 +119,7 @@ While we believe these decorators should be comprehensive we have provided two w
     ```
 - Defining your own test decorator using the decorator_factory
     ```python
-    from europy.decorators import decorator_factory
+    from europy.decorator import decorator_factory
     from europy.lifecycle.reporting import execute_tests
 
     def end_to_end(name: str = ""):

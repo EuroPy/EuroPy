@@ -1,7 +1,17 @@
-import os, yaml, json
-from typing import Dict, Any
+import json
+import os
+import yaml
+
 from europy.lifecycle import reporting
-from europy.decorators import isnotebook
+
+
+def isnotebook():
+    try:
+        shell = get_ipython()
+        return True
+    except NameError:
+        return False
+
 
 def load_global_params(path: str, report=True):
     """Load and return global paramss
@@ -13,17 +23,16 @@ def load_global_params(path: str, report=True):
     Returns:
         Dict[str:Any]: global params
     """
-    
+
     params = {}
     with open(path, 'r') as f:
         if os.path.split(path)[-1].split('.')[-1] in ['yml', 'yaml']:
             params = yaml.load(f, Loader=yaml.FullLoader)
-        else: 
+        else:
             params = json.load(f)
 
-    
     global_params = params.get('global', {})
-    
+
     if report:
         reporting.capture_parameters('global', global_params)
         if isnotebook():
@@ -32,3 +41,4 @@ def load_global_params(path: str, report=True):
                 print(f'  - global.{key}: {value}')
 
     return global_params
+

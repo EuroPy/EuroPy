@@ -1,4 +1,3 @@
-import sys
 from enum import Enum
 from types import TracebackType
 from typing import Union, List, Tuple, Type
