@@ -46,13 +46,13 @@ class Report:
     def to_markdown(self):
         markdownReport = Markdown()
         markdownReport.add_header(self.title)
-        markdownReport.add_horizontal_rule()
+        markdownReport.add_horizontal_line()
         markdownReport.add_block_content(self.model_card)
-        markdownReport.add_horizontal_rule()
+        markdownReport.add_horizontal_line()
         markdownReport.add_header('Test Results')
         markdownReport.add_block_content(self.test_results)
         markdownReport.add_image(self.figures)  # needs image path url and text
-        markdownReport.save('result.md')
+        markdownReport.saveToFile('result.md')
 
     def to_dictionaries(self, pretty: bool = False):
         indent = 4 if pretty else None
