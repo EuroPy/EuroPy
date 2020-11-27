@@ -6,7 +6,7 @@ from europy import report_directory
 
 class Markdown:
 
-    def __init__(self) -> None:
+    def __init__(self):
         self.content = ""
 
     def saveToFile(self, file_name: str):
