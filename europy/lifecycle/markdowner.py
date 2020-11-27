@@ -6,6 +6,11 @@ from europy import report_directory
 
 class Markdown:
 
+    cls_dict_markdown = ""
+    tab = "  "
+    list_tag = '* '
+    htag = '#'
+
     def __init__(self):
         self.content = ""
 
@@ -71,8 +76,57 @@ class Markdown:
         self.content += "\n"
         return self
 
+    def add_dict_content(self, data):
+        depth = 0
+        dict_content = self.parseInputData(data, depth)
+        self.content += dict_content
+        return self
 
+    @classmethod
+    def parseInputData(cls, data, depth):
+        if isinstance(data, dict):
+            cls.parseDict(data, depth)
+        if isinstance(data, list):
+            cls.parseList(data, depth)
+        return cls.cls_dict_markdown
 
+    @classmethod
+    def parseDict(cls, d, depth, markdown):
+        for k in d:
+            if isinstance(d[k], (dict, list)):
+                cls.addHeader(k, depth)
+                cls.parseInputData(d[k], depth + 1)
+            else:
+                cls.addValue(k, d[k], depth)
 
+    @classmethod
+    def parseList(cls, lis, depth, markdown):
+        for value in lis:
+            if not isinstance(value, (dict, list)):
+                index = lis.index(value)
+                cls.addValue(index, value, depth)
+            else:
+                cls.parseDict(value, depth)
 
+    @classmethod
+    def addHeader(cls, value, depth, mark):
+        chain = cls.buildHeaderChain(depth)
+        cls.cls_dict_markdown += chain.replace('value', value.title())
+
+    @classmethod
+    def addValue(cls, key, value, depth, mark):
+        chain = cls.buildValueChain(key, value, depth)
+        cls.cls_dict_markdown += chain
+
+    @classmethod
+    def buildHeaderChain(cls, depth):
+        chain = cls.list_tag * (bool(depth)) + cls.htag * (depth + 1) + \
+                ' value ' + (cls.htag * (depth + 1) + '\n')
+        return chain
+
+    @classmethod
+    def buildValueChain(cls, key, value, depth):
+        chain = cls.tab * (bool(depth - 1)) + cls.list_tag + \
+                str(key) + ": " + str(value) + "\n"
+        return chain
 
