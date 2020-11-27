@@ -47,7 +47,7 @@ class Report:
         markdownReport = Markdown()
         markdownReport.add_header(self.title)
         markdownReport.add_horizontal_rule()
-        markdownReport.add_blockquote(self.model_card)
+        markdownReport.add_block_content(self.model_card)
         markdownReport.add_horizontal_rule()
         markdownReport.add_header('Test Results')
         markdownReport.add_block_content(self.test_results)
