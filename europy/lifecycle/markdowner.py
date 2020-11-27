@@ -80,12 +80,12 @@ class Markdown:
         depth = 0
         self.content += "\n"
         self.parseInputData(data, depth)
-        self.content += self.getClassMarkdownData()
+        self.content += self.getDictMarkdownData()
         self.content += "\n"
         return self
 
     @classmethod
-    def getClassMarkdownData(cls):
+    def getDictMarkdownData(cls):
         return cls.cls_dict_markdown
 
     @classmethod
