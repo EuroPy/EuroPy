@@ -50,7 +50,7 @@ class Report:
         markdownReport.add_blockquote(self.model_card)
         markdownReport.add_horizontal_rule()
         markdownReport.add_header('Test Results')
-        markdownReport.add_blockquote(self.test_results)
+        markdownReport.add_block_content(self.test_results)
         markdownReport.add_image(self.figures)  # needs image path url and text
         markdownReport.save('result.md')
 

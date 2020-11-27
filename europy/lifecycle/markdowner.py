@@ -46,7 +46,7 @@ class Markdown:
         self.content += self.create_block("___")
         return self
 
-    def add_blockquote(self, *lines: Any):
+    def add_block_content(self, *lines: Any):
         _lines: List[str] = list(lines)
         self.content += self.create_block("> " + "  \n".join(_lines), 2)
         return self
