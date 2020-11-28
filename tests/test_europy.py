@@ -83,7 +83,7 @@ def fairness_example():
 
 
 @transparency("Example Transparency Test")
-def transparency_example(plots={}):
+def transparency_example(plots: dict):
     assert True
     plots["transparency"] = sample_plot("transparency")
     return "It's easy to understand!"
