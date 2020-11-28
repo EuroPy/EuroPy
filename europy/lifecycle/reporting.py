@@ -12,7 +12,6 @@ from europy.lifecycle.result_promise import TestPromise
 from europy.utils import isnotebook
 
 __tests: dict = dict()
-
 __report = Report()
 
 
