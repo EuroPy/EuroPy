@@ -6,7 +6,7 @@ from typing import List
 from pandas import DataFrame
 
 from europy.decorator import test, bias, data_bias, fairness, transparency, accountability, unit, integration, \
-    minimum_functionality, model_details, using_params, report_plt
+    minimum_functionality, model_details, using_params
 from europy.decorator.factories import decorator_factory
 from europy.lifecycle.model_details import ModelDetails
 from europy.lifecycle.reporting import execute_tests
@@ -162,11 +162,6 @@ def params(op1: int = None, op2: int = None, text_example: str = None, list_exam
     assert text_example != None, "text_example should be populated from params"
     assert list_example != [], "list_example should be populated from params"
     assert a_global_param != None, "a_global_param should be populated from params"
-
-
-@report_plt("example_figure")
-def save_image():
-    return sample_plot('standalone figure')
 
 
 def test_execute():
