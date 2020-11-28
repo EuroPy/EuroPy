@@ -56,8 +56,9 @@ class Markdown:
         self.content += self.create_block("> " + "  \n".join(_lines), 2)
         return self
 
-    def add_image(self, url: str, alt_text: str):
-        self.content += self.create_block("![{}]({})".format(alt_text, url), 2)
+    def add_image(self, file_name: str, alt_text: str):
+        file_path = os.path.join(report_directory+'/figures/', file_name)
+        self.content += self.create_block("![{}]({})".format(alt_text, file_path), 2)
         return self
 
     @classmethod
@@ -77,6 +78,7 @@ class Markdown:
         return self
 
     def add_dict_content(self, data):
+        self.resetDictMarkdownData()
         depth = 0
         self.content += "\n"
         self.parseInputData(data, depth)
@@ -87,6 +89,11 @@ class Markdown:
     @classmethod
     def getDictMarkdownData(cls):
         return cls.cls_dict_markdown
+
+    @classmethod
+    def resetDictMarkdownData(cls):
+        cls.cls_dict_markdown = ""
+
 
     @classmethod
     def parseInputData(cls, data, depth):

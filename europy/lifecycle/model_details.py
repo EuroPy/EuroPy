@@ -33,8 +33,6 @@ class ModelDetails:
 
         self.title = title
         self.organization = organization
-        self.authors = authors
-        self.emails = emails
         self.model_date = model_date
         self.model_version = model_version
         self.citation_details = citation_details
@@ -46,3 +44,5 @@ class ModelDetails:
         self.data_url = data_url
         
         self.description = description
+        self.authors = authors
+        self.emails = emails

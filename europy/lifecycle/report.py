@@ -46,12 +46,17 @@ class Report:
     def to_markdown(self):
         markdownReport = Markdown()
         markdownReport.add_header(self.title)
-        markdownReport.add_horizontal_line()
-        markdownReport.add_block_content(self.model_card)
+        markdownReport.add_header('Model Information')
+        markdownReport.add_dict_content(self.model_card['details'].__dict__)
+        markdownReport.add_dict_content(self.model_card['parameters'])
         markdownReport.add_horizontal_line()
         markdownReport.add_header('Test Results')
-        markdownReport.add_block_content(self.test_results)
-        markdownReport.add_image(self.figures)  # needs image path url and text
+        markdownReport.add_horizontal_line()
+        markdownReport.add_dict_content(json.loads(json.dumps(self.test_results, cls=Encoder)))
+        markdownReport.add_image('example_figure.png',
+                                 'Stand Alone Figure')  # this is temp as images were getting generated separately
+        markdownReport.add_image('transparency.png',
+                                 'Stand Alone Figure')  # this is temp as images were getting generated separately
         markdownReport.saveToFile('result.md')
 
     def to_dictionaries(self, pretty: bool = False):

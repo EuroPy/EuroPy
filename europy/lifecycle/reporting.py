@@ -67,6 +67,7 @@ make_report_dir()
 def flush():
     file_name = f'report.json'
     file_path = os.path.join(report_directory, file_name)
+    report.to_markdown()
     with open(file_path, 'w') as outfile:
         outfile.write(report.to_dictionaries(pretty=True))
 
