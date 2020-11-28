@@ -9,7 +9,7 @@ TODO: Fill this in
 
 ## Usage
 
-Creating a test function is accmplished by simply decorating any function with decorators from `europy.decorators`. This will register your test function with the EuroPy lifecycle. In order to execute all registered tests you simply need to execute the `europy.lifecycle.reporting.execute_tests` function. Any parameters passed to the `execute_tests` function will also be passed to all registered functions. 
+Creating a test function is accomplished by simply decorating any function with decorators from `europy.decorators`. This will register your test function with the EuroPy lifecycle. In order to execute all registered tests you simply need to execute the `europy.lifecycle.reporting.execute_tests` function. Any parameters passed to the `execute_tests` function will also be passed to all registered functions. 
 
 ```python
 from europy.decorators import bias, fairness
