@@ -172,3 +172,17 @@ def save_image():
 def test_execute():
     results: List[TestResult] = execute_tests()
     assert all([x.success for x in results])
+    assert len(results) == 11
+
+
+def test_execute_clear():
+    results: List[TestResult] = execute_tests(clear=True)
+    assert len(results) == 11
+
+    @fairness("Example Fairness Test")
+    def fairness_example():
+        assert True
+        return "Its Fair!"
+
+    results: List[TestResult] = execute_tests()
+    assert len(results) == 1

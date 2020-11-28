@@ -28,7 +28,7 @@ class TestPromise:
         if self.description is None and other.description is not None:
             self.description = other.description
 
-    def execute(self, *args, **kwargs) -> TestResult:
+    def execute(self, report_directory: str, *args, **kwargs) -> TestResult:
         print(f"Execute - {self.key} ({self.labels})")
         try:
             plots = {}
@@ -41,7 +41,7 @@ class TestPromise:
             return TestResult(self.key,
                               self.labels,
                               result=result,
-                              figures=[ReportFigure.of(name, plot) for name, plot in plots.items()],
+                              figures=[ReportFigure.of(name, report_directory, plot) for name, plot in plots.items()],
                               description=self.description,
                               success=True)
         except:
