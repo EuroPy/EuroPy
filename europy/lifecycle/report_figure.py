@@ -24,6 +24,7 @@ class ReportFigure:
         fig_path = os.path.join(report_directory, fig_rel_path)
         
         plot.savefig(fig_path)
+        plot.close()
         report_figure.img_path = fig_rel_path
         report_figure.title = name
         
