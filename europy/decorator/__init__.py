@@ -95,7 +95,7 @@ def model_details(file_path: str = None):
             import json, yaml
 
             # pull current report (generated @ __init__)
-            details = reporting.get_report().model_card['details']
+            details = reporting.__report.model_card['details']
 
             func_spec = inspect.getfullargspec(func)
 
@@ -152,7 +152,7 @@ def using_params(file_path: str, report=True):
             file_name = os.path.split(file_path)[0]
             func_spec = inspect.getfullargspec(func)
             if report:
-                params = reporting.get_report().model_card['parameters'].get(func_name, {})
+                params = reporting.__report.model_card['parameters'].get(func_name, {})
             else:
                 params = {}
 
@@ -196,32 +196,3 @@ def using_params(file_path: str, report=True):
         return inner_func_wrapper
 
     return inner_wrapper
-
-
-def report_plt(name: str = None, report=True):
-    """Adds a figure to the report
-
-    Args:
-        name (str, optional): name of the figure. Defaults to None.
-        report (bool, optional): should include in model card report. Defaults to True.
-    """
-
-    def inner_warpper(func):
-
-        @wraps(func)
-        def inner_func_wrapper(*args, **kwargs):
-
-            func_spec = inspect.getfullargspec(func)
-            plt = func(*args, **kwargs)
-
-            if report:
-                reporting.capture_figure(name, plt)
-                if isnotebook():
-                    print(f"========= EuroPy Figure Capture: ({name}) =========")
-                    plt.show()
-
-            return plt
-
-        return inner_func_wrapper
-
-    return inner_warpper
