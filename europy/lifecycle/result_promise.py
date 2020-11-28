@@ -31,9 +31,8 @@ class TestPromise:
     def execute(self, *args, **kwargs) -> TestResult:
         print(f"Execute - {self.key} ({self.labels})")
         try:
-
             plots = {}
-            if "plots" in kwargs.keys():
+            if "plots" in self.func.__code__.co_varnames:
                 kwargs["plots"] = plots
 
             result: Union[float, str, bool, DataFrame] = self.func(*args, **kwargs)
