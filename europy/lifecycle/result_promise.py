@@ -1,6 +1,5 @@
-import sys
-from types import TracebackType
-from typing import List, Union, Tuple, Type
+import traceback
+from typing import List, Union
 
 from pandas import DataFrame
 
@@ -44,13 +43,12 @@ class TestPromise:
                               figures=[ReportFigure.of(name, report_directory, plot) for name, plot in plots.items()],
                               description=self.description,
                               success=True)
-        except:
-            error_info: Union[Tuple[Type[BaseException], BaseException, TracebackType], Tuple[None, None, None]] = \
-                sys.exc_info()[0]
+        except Exception as ex:
+            trace = traceback.format_exception(etype=type(ex), value=ex, tb=ex.__traceback__)
             print(f"\tFAIL")
             return TestResult(self.key,
                               self.labels,
-                              result=str(error_info),
+                              result=trace,
                               figures=[],
                               description=self.description,
                               success=False)
