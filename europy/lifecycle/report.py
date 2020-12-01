@@ -1,5 +1,5 @@
 import json
-from typing import Union, Optional
+from typing import Union
 from datetime import datetime
 from europy.lifecycle.model_details import ModelDetails
 from europy.lifecycle.report_figure import ReportFigure

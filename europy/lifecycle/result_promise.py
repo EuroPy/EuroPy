@@ -1,10 +1,11 @@
 import sys
-from typing import List, Union, Tuple, Type
 from types import TracebackType
+from typing import List, Union, Tuple, Type
+
 from pandas import DataFrame
 
-from europy.lifecycle.report_figure import ReportFigure
 from europy.lifecycle.report import TestResult, TestLabel
+from europy.lifecycle.report_figure import ReportFigure
 
 
 class TestPromise:
@@ -27,21 +28,20 @@ class TestPromise:
         if self.description is None and other.description is not None:
             self.description = other.description
 
-    def execute(self, *args, **kwargs) -> TestResult:
+    def execute(self, report_directory: str, *args, **kwargs) -> TestResult:
         print(f"Execute - {self.key} ({self.labels})")
         try:
-            
             plots = {}
-            if "plots" in kwargs.keys():
+            if "plots" in self.func.__code__.co_varnames:
                 kwargs["plots"] = plots
-            
+
             result: Union[float, str, bool, DataFrame] = self.func(*args, **kwargs)
             print(f"\tPASS")
 
             return TestResult(self.key,
                               self.labels,
                               result=result,
-                              figures=[ReportFigure.of(name, plot) for name, plot in plots.items()],
+                              figures=[ReportFigure.of(name, report_directory, plot) for name, plot in plots.items()],
                               description=self.description,
                               success=True)
         except:
