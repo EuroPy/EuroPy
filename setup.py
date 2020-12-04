@@ -18,11 +18,11 @@ setuptools.setup(
     long_description_content_type="text/markdown",
     url="https://github.com/EuroPy/EuroPyt",
     packages=setuptools.find_packages(),
-    entry_points={
-        "pytest11": [
-            "europy = europy.pytest_europy"
-        ]
-    },
+    # entry_points={
+    #     "pytest11": [
+    #         "europy = europy.pytest_europy"
+    #     ]
+    # },
     classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: Apache Software License",

@@ -1,25 +1,29 @@
-from pandas import DataFrame
-import matplotlib
-from matplotlib import pyplot
-from typing import Dict
-
-import europy
-from europy.lifecycle.result import TestResult, TestLabel
-from europy.lifecycle.report import Report
-
 # TODO: Explicitly import each decorator in release
-from europy.decorators import *
+
+
+from typing import List
+
+from pandas import DataFrame
+
+from europy.decorator import test, bias, data_bias, fairness, transparency, accountability, unit, integration, \
+    minimum_functionality, model_details, using_params
+from europy.decorator.factories import decorator_factory
+from europy.lifecycle.model_details import ModelDetails
+from europy.lifecycle.reporting import execute_tests
+from europy.lifecycle.result import TestLabel, TestResult
+
+# This is how you make your own decorator for tests with a custom label or with a provided label
 
 EXAMPLE_LABEL_NAME = "my-custom-label"
 
 
-# This is how you make your own decorator for tests with a custom label or with a provided label
 def custom_decorator(name: str = ""):
     labels = ["my-custom-decorator-label", TestLabel.MINIMUM_FUNCTIONALITY]
     return decorator_factory(labels, name)
 
 
 df = DataFrame([[1, 2], [3, 4]], columns=['odds', 'evens'])
+
 
 def sample_plot(title: str):
     import matplotlib.pyplot as plt
@@ -47,81 +51,81 @@ def sample_plot(title: str):
 
 # This is how you can create your own labels on the fly
 @test(EXAMPLE_LABEL_NAME, "My custom label test")
-def test_custom_label():
+def custom_label():
     assert True
     return df
 
 
 @custom_decorator("Test with custom decorator")
-def test_custom_decorator():
+def custom_decorator():
     assert True
     return df
 
 
-# This is an example on using raw decorators
+# This is an example on using raw decorator
 @bias("Testing it out")
-def test_sample_with_raw_decorator():
+def sample_with_raw_decorator():
     assert True
     return df
 
 
 @data_bias("example data bias test")
-def test_data_bias():
+def data_bias():
     assert True
     return df
 
 
-# This is an example on using raw decorators
+# This is an example on using raw decorator
 @fairness("Example Fairness Test")
-def test_fairness_example():
+def fairness_example():
     assert True
     return "Its Fair!"
 
 
 @transparency("Example Transparency Test")
-def test_transparency_example(plots={}):
+def transparency_example(plots: dict):
     assert True
     plots["transparency"] = sample_plot("transparency")
     return "It's easy to understand!"
 
 
 @accountability("Example Accountability Test")
-def test_accountability_example():
+def accountability_example():
     assert True
     return "expectations are defined!"
 
 
-# This is an example on using raw decorators
+# This is an example on using raw decorator
 @unit("Example Unit Test")
-def test_unit_example():
+def unit_example():
     assert True
 
 
-# This is an example on using raw decorators
+# This is an example on using raw decorator
 @integration("Example Integration Test")
-def test_integration_example():
+def integration_example():
     assert True
 
 
-# This is an example on using raw decorators
+# This is an example on using raw decorator
 @minimum_functionality("Example Minimum Functionality Test")
-def test_minimum_functionality_example():
+def minimum_functionality_example():
     assert True
 
 
-# This is an example on using raw decorators
+# This is an example on using raw decorator
 @unit("Example with multiple labels")
 @fairness()
 @minimum_functionality()
 @integration()
 @bias()
 @test(EXAMPLE_LABEL_NAME)
-def test_multiple_labels():
+def multiple_labels():
     return "Woah, what a fair unit test"
 
 
-@model_details('tests/model_details_example.json') # this will override the current details in the report
-def test_model_details_json(details: ModelDetails=None):
+@model_details('tests/model_details_example.json')  # this will override the current details in the report
+def model_details_json(details: ModelDetails = None):
     import json
     details.description += '... this is a computed description'
 
@@ -131,8 +135,9 @@ def test_model_details_json(details: ModelDetails=None):
         assert loaded_details.title == details.title
         assert loaded_details.description != details.description
 
+
 @model_details('tests/model_details_example.yml')
-def test_model_details_yaml(details: ModelDetails=None):
+def model_details_yaml(details: ModelDetails = None):
     import yaml
     details.description += '... this is computed yaml description'
 
@@ -144,13 +149,14 @@ def test_model_details_yaml(details: ModelDetails=None):
 
 
 # this must run in order to pass
-@model_details() # this will load the latest in the report
-def test_loaded_model_details(details: ModelDetails=None):
+@model_details()  # this will load the latest in the report
+def loaded_model_details(details: ModelDetails = None):
     assert '... this is computed yaml description' in details.description
 
 
 @using_params('tests/param_example.yml')
-def test_params(op1: int=None, op2: int=None, text_example: str=None, list_example: List[float]=[], a_global_param=None):
+def params(op1: int = None, op2: int = None, text_example: str = None, list_example: List[float] = [],
+           a_global_param=None):
     assert op1 != None, "op1 should be populated from params"
     assert op2 != None, "op1 should be populated from params"
     assert text_example != None, "text_example should be populated from params"
@@ -158,6 +164,20 @@ def test_params(op1: int=None, op2: int=None, text_example: str=None, list_examp
     assert a_global_param != None, "a_global_param should be populated from params"
 
 
-@report_plt("example_figure")
-def test_save_image():
-    return sample_plot('standalone figure')
+def test_execute():
+    results: List[TestResult] = execute_tests()
+    assert all([x.success for x in results])
+    assert len(results) == 11
+
+
+def test_execute_clear():
+    results: List[TestResult] = execute_tests(clear=True)
+    assert len(results) == 11
+
+    @fairness("Example Fairness Test")
+    def fairness_example():
+        assert True
+        return "Its Fair!"
+
+    results: List[TestResult] = execute_tests()
+    assert len(results) == 1
