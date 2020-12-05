@@ -17,7 +17,22 @@ class ModelCard:
         md += self.model_details.to_markdown(level=level+1)
         
         md.add_header('Parameters', level+1)
-        md.add_dict_content(self.parameters, depth=level+1)
+        # md.add_dict_content(self.parameters, depth=level+1)
+
+        md_param_list = ''
+        for title, param_set in self.parameters.items():
+            md_param_list += f'* **{title}**\n'
+            for param_name, param in param_set.items():
+                md_param_list += f'\t* {param_name}: '
+                if isinstance(param, list):
+                    md_param_list += '\n'
+                    for l in param:
+                        md_param_list += f'\t\t* {l}\n'
+                else:
+                    md_param_list += f'{param}'
+                md_param_list += '\n'
+
+        md.add_md_content(md_param_list)
 
         return md
         
