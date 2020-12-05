@@ -72,6 +72,7 @@ ___
 |---:|-------:|--------:|
 |  0 |      1 |       2 |
 |  1 |      3 |       4 |
+___
 ### Test with custom decorator
 
 
@@ -86,6 +87,7 @@ ___
 |---:|-------:|--------:|
 |  0 |      1 |       2 |
 |  1 |      3 |       4 |
+___
 ### Testing it out
 
 
@@ -100,6 +102,7 @@ ___
 |---:|-------:|--------:|
 |  0 |      1 |       2 |
 |  1 |      3 |       4 |
+___
 ### example data bias test
 
 
@@ -114,6 +117,7 @@ ___
 |---:|-------:|--------:|
 |  0 |      1 |       2 |
 |  1 |      3 |       4 |
+___
 ### Example Fairness Test
 
 
@@ -126,6 +130,7 @@ ___
 Its Fair!
 
 
+___
 ### Example Transparency Test
 
 
@@ -144,6 +149,7 @@ It's easy to understand!
 
 
 
+___
 ### Example Accountability Test
 
 
@@ -156,6 +162,7 @@ It's easy to understand!
 expectations are defined!
 
 
+___
 ### Example Unit Test
 
 
@@ -166,6 +173,7 @@ expectations are defined!
 **Results**: (Success: True)
 
 
+___
 ### Example Integration Test
 
 
@@ -176,6 +184,7 @@ expectations are defined!
 **Results**: (Success: True)
 
 
+___
 ### Example Minimum Functionality Test
 
 
@@ -186,6 +195,7 @@ expectations are defined!
 **Results**: (Success: True)
 
 
+___
 ### Example with multiple labels
 
 
@@ -198,5 +208,6 @@ expectations are defined!
 Woah, what a fair unit test
 
 
+___
 
 

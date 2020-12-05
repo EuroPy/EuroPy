@@ -56,6 +56,7 @@ class Report:
         for test_title, test in self.test_results.items():
             test_md = test.to_markdown()
             md += test_md
+            md.add_horizontal_line()
         
         md.add_md_content("")
         return md
