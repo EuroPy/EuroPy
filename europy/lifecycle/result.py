@@ -1,3 +1,4 @@
+import json
 from enum import Enum
 from types import TracebackType
 from typing import Union, List, Tuple, Type
@@ -5,6 +6,7 @@ from typing import Union, List, Tuple, Type
 from _pytest.mark import Mark
 from pandas import DataFrame
 
+from europy.lifecycle.markdowner import Markdown
 from europy.lifecycle.report_figure import ReportFigure
 
 
@@ -46,3 +48,28 @@ class TestResult:
         self.result = result
         self.figures: [ReportFigure] = figures
         self.success = success
+
+    def to_markdown(self):
+        mdTestResult = Markdown()
+        mdTestResult.add_header(self.key)
+        mdTestResult.add_horizontal_line()
+        mdTestResult.add_text(self.description)
+        mdTestResult.add_horizontal_line()
+        mdTestResult.add_dict_content(self.labels)
+        mdTestResult.add_horizontal_line()
+
+        if isinstance(self.result, DataFrame):
+            mdTestResult.add_data_frame(self.result)
+        if isinstance(self.result, str):
+            mdTestResult.add_text(self.result)
+        if isinstance(self.result, Tuple):
+            mdTestResult.add_dict_content(
+                json.loads(json.dumps(self.result.__dict__)))  # couldn't test enough this part
+
+        mdTestResult.add_horizontal_line()
+        mdTestResult.add_header('Figures')
+        mdTestResult.add_horizontal_line()
+        mdTestResult.add_image_array(self.figures)
+        mdTestResult.add_horizontal_line()
+        mdTestResult.add_text('Success: ' + self.success)
+        return mdTestResult.content

@@ -72,6 +72,10 @@ def execute_tests(clear: bool = False, *args, **kwargs):
 
     file_name = f'report.json'
     file_path = os.path.join(report_directory, file_name)
+    # this is new call
+    report.to_markdown(report_directory)
+    # this is old call
+    # report.to_markdown_old(report_directory)
     with open(file_path, 'w') as outfile:
         outfile.write(report.to_dictionaries(pretty=True))
 
