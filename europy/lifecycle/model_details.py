@@ -1,5 +1,7 @@
+import os, yaml, json
 from datetime import datetime
 from typing import List, Optional
+from europy.lifecycle.markdowner import Markdown
 
 class ModelDetails:
     def __init__(self, title: str,
@@ -45,4 +47,45 @@ class ModelDetails:
         self.data_license = data_license
         self.data_url = data_url
         
-        self.description = description
+        self.description = description 
+    
+    def to_markdown(self, level: int=3) -> Markdown:
+        md = Markdown()
+        md.add_header('Model Details', level)
+        # md.add_dict_content(self.__dict__)
+
+        md.add_md_content(f'**Organization**: {self.organization}')
+        
+        md.add_md_content(f'**Authors**:')
+        author_content = ''
+        for i, author in enumerate(self.authors):
+            author_content += f'* {author} ({self.emails[i]})\n'
+
+        md.add_md_content(author_content)
+
+        md.add_md_content(f'**Created Date**: {self.model_date}')
+        md.add_md_content(f'**Version**: {self.model_version}')
+        md.add_md_content(f'**Citation**: \n```\n{self.citation_details}\n```')
+        md.add_md_content(f'**Model License**: {self.model_license}')
+        md.add_md_content(f'**Model URL**: {self.model_url}')
+        md.add_md_content(f'**Data License**: {self.data_license}')
+        md.add_md_content(f'**Data URL**: {self.data_url}')
+        
+        md.add_md_content(f'**Description**:')
+        md.add_md_content(self.description)
+        return md
+
+    @classmethod
+    def of(cls, file_path: str):
+        if file_path:
+            # load the model detail path
+            with open(file_path, 'r') as f:
+                # load in yml or json format (to dict)
+                if os.path.split(file_path)[-1].split('.')[-1] in ["yml", "yaml"]:
+                    details_data = yaml.load(f, Loader=yaml.FullLoader)
+                else:
+                    details_data = json.load(f)
+
+                details = cls(**details_data)
+                return details
+        return
