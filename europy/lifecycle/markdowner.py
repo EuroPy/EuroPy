@@ -92,7 +92,7 @@ class Markdown:
                 self.content += "\n"
                 return self
             self.content += "\n"
-            self.content += self.add_image(fig.img_path, fig.title)
+            self.add_image(fig.img_path, fig.title)
         self.content += "\n"
         return self
 

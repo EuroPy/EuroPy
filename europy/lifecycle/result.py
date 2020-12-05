@@ -35,41 +35,41 @@ class TestLabel(str, Enum):
 class TestResult:
     def __init__(self,
                  key: str,
-                 labels: List[str],
+                 labels: List[str]=[],
                  result: Union[
                      float, str, bool, DataFrame, Tuple[Type[BaseException], BaseException, TracebackType], Tuple[
-                         None, None, None]],
-                 figures: [ReportFigure],
-                 description: str,
-                 success: bool):
+                         None, None, None]]="",
+                 figures: [ReportFigure]=[],
+                 description: str="",
+                 success: bool=False):
         self.key = key
-        self.description = description
+        self.description = description if description is not None else ""
         self.labels = labels
         self.result = result
         self.figures: [ReportFigure] = figures
         self.success = success
 
-    def to_markdown(self):
-        mdTestResult = Markdown()
-        mdTestResult.add_header(self.key)
-        mdTestResult.add_horizontal_line()
-        mdTestResult.add_text(self.description)
-        mdTestResult.add_horizontal_line()
-        mdTestResult.add_dict_content(self.labels)
-        mdTestResult.add_horizontal_line()
+    def to_markdown(self, level=3):
+        md = Markdown()
+        md.add_header(self.key, level)
+    
+        md.add_text(self.description)
+        
+        
+        label_list = [f'`{l}`' for l in self.labels]
+        md.add_md_content(f'**Labels**: {", ".join(label_list)}')
 
+        md.add_md_content(f'**Results**: (Success: {self.success})\n')
         if isinstance(self.result, DataFrame):
-            mdTestResult.add_data_frame(self.result)
+            md.add_data_frame(self.result)
         if isinstance(self.result, str):
-            mdTestResult.add_text(self.result)
+            md.add_text(self.result)
         if isinstance(self.result, Tuple):
-            mdTestResult.add_dict_content(
-                json.loads(json.dumps(self.result.__dict__)))  # couldn't test enough this part
+            md.add_text(f'{self.tuple}')             
+            # mdTestResult.add_dict_content(
+            #     json.loads(json.dumps(self.result.__dict__)))  # couldn't test enough this part
 
-        mdTestResult.add_horizontal_line()
-        mdTestResult.add_header('Figures')
-        mdTestResult.add_horizontal_line()
-        mdTestResult.add_image_array(self.figures)
-        mdTestResult.add_horizontal_line()
-        mdTestResult.add_text('Success: ' + self.success)
-        return mdTestResult.content
+        if len(self.figures) > 0:
+            md.add_header('Figures', level+1)
+            md.add_image_array(self.figures) 
+        return md

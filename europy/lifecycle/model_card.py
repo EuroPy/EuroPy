@@ -17,8 +17,8 @@ class ModelCard:
         md += self.model_details.to_markdown(level=level+1)
         
         md.add_header('Parameters', level+1)
-        # md.add_dict_content(self.parameters, depth=level+1)
 
+        #FIXME: params only support one level
         md_param_list = ''
         for title, param_set in self.parameters.items():
             md_param_list += f'* **{title}**\n'
