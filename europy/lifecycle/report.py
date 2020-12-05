@@ -1,4 +1,4 @@
-import json
+import json, os
 from typing import Union
 from datetime import datetime
 
@@ -42,6 +42,8 @@ class Report:
 
         self.timestamp = datetime.now()
 
+        self.directory = self.make_report_dir(self.title)
+
 
     def to_markdown(self) -> Markdown:
         md = Markdown()
@@ -67,3 +69,15 @@ class Report:
 
     def capture(self, test_result: TestResult):
         self.test_results[test_result.key] = test_result
+
+    @classmethod
+    def make_report_dir(cls, title):
+        root_report_directory = '.europy/reports'
+        report_directory = os.path.join(root_report_directory, f'{title}_{datetime.now().strftime("%d%m%Y_%H%M%S")}')
+        if not os.path.exists(report_directory):
+            os.makedirs(report_directory)
+
+        img_dir = os.path.join(report_directory, 'figures')
+        if not os.path.exists(img_dir):
+            os.makedirs(img_dir)
+        return report_directory
