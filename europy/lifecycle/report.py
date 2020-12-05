@@ -4,6 +4,7 @@ from datetime import datetime
 
 from europy.lifecycle.markdowner import Markdown
 from europy.lifecycle.model_details import ModelDetails
+from europy.lifecycle.model_card import ModelCard
 from europy.lifecycle.report_figure import ReportFigure
 
 from pandas import DataFrame
@@ -18,6 +19,8 @@ class Encoder(json.JSONEncoder):
         if isinstance(obj, DataFrame):
             return obj.to_dict()
         if isinstance(obj, Report):
+            return obj.__dict__
+        if isinstance(obj, ModelCard):
             return obj.__dict__
         if isinstance(obj, ModelDetails):
             return obj.__dict__
@@ -34,27 +37,19 @@ class Report:
     def __init__(self, title: str = "EuroPy Test Report"):
         self.title = title
         self.test_results: dict = dict()
-        self.model_card: dict = dict()
+        self.model_card: ModelCard = ModelCard(ModelDetails(title=title))
         self.figures: [ReportFigure] = []
-
-        # TODO: make ModelCard class
-        self.model_card['details'] = ModelDetails(title=title)
-        self.model_card['parameters'] = {}
 
         self.timestamp = datetime.now()
 
     # Please help me with debugging if you have some time - else will take a look tomorrow
     # Also noticed when i run this call executes multiple tests and doesnt create m
-    def to_markdown(self, report_directory):
+    def to_markdown(self) -> Markdown:
         md = Markdown()
-        md.add_header(f'{self.title}', 0)
+        md.add_header(f'{self.title}', 1)
         md.add_horizontal_line()
         
-        md.add_header('Model Card', 2)
-        md += self.model_card['details'].to_markdown()
-
-        md.add_header('Parameters', 3)
-        md.add_dict_content(self.model_card['parameters'])
+        md += self.model_card.to_markdown()
 
         md.add_horizontal_line()
 
@@ -71,7 +66,7 @@ class Report:
         #     md.add_md_content(result.to_markdown())
         # md.add_linebreak()
         # print(md.content)
-        md.saveToFile(report_directory, 'result.md')
+        return md
 
     # this one is old code works with image but will be removed once the new one works
     def to_markdown_old(self, report_directory):

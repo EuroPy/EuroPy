@@ -99,17 +99,6 @@ def model_details(file_path: str = None):
 
             func_spec = inspect.getfullargspec(func)
 
-            if file_path:
-                # load the model detail path
-                with open(file_path, 'r') as f:
-                    # load in yml or json format (to dict)
-                    if os.path.split(file_path)[-1].split('.')[-1] in ["yml", "yaml"]:
-                        details_data = yaml.load(f, Loader=yaml.FullLoader)
-                    else:
-                        details_data = json.load(f)
-
-                    details = ModelDetails(**details_data)
-
             # load details into the func arguments (optional)
             if 'details' in func_spec.args:
                 kwargs['details'] = details

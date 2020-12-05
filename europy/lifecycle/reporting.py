@@ -1,4 +1,5 @@
 import os
+import json, yaml
 from datetime import datetime
 from typing import Dict
 from typing import List
@@ -52,6 +53,21 @@ def make_report_dir():
     return report_directory
 
 
+def report_model_params(file_path: str):
+    params = {}
+    with open(file_path, 'r') as f:
+        if os.path.split(file_path)[-1].split('.')[-1] in ['yml', 'yaml']:
+            params = yaml.load(f, Loader=yaml.FullLoader)
+        else:
+            params = json.load(f)
+
+    __report.model_card.parameters = params
+
+
+def report_model_details(path: str):
+    details = ModelDetails.of(path)
+    __report.model_card.model_details = details
+
 def execute_tests(clear: bool = False, *args, **kwargs):
     report = Report()
     report_directory = make_report_dir()
@@ -73,7 +89,8 @@ def execute_tests(clear: bool = False, *args, **kwargs):
     file_name = f'report.json'
     file_path = os.path.join(report_directory, file_name)
     # this is new call
-    report.to_markdown(report_directory)
+    md = report.to_markdown()
+    md.save(report_directory, 'report.md')
     # this is old call
     # report.to_markdown_old(report_directory)
     with open(file_path, 'w') as outfile:

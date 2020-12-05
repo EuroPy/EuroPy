@@ -14,7 +14,7 @@ class Markdown:
     def __init__(self):
         self.content = ""
 
-    def saveToFile(self, report_directory: str, file_name: str):
+    def save(self, report_directory: str, file_name: str):
         file_path = os.path.join(report_directory, file_name)
         if not os.path.exists(file_path):
             try:
@@ -96,9 +96,8 @@ class Markdown:
         self.content += "\n"
         return self
 
-    def add_dict_content(self, data):
+    def add_dict_content(self, data, depth):
         self.reset_dict_markdown_data()
-        depth = 0
         self.content += "\n"
         self.parse_input_data(data, depth)
         self.content += self.getDictMarkdownData()
@@ -134,27 +133,27 @@ class Markdown:
     def parse_dict(cls, d, depth):
         for k in d:
             if isinstance(d[k], (dict, list)):
-                cls.add_header(k, depth)
+                cls._add_header(k, depth)
                 cls.parse_input_data(d[k], depth + 1)
             else:
-                cls.add_value(k, d[k], depth)
+                cls._add_value(k, d[k], depth)
 
     @classmethod
     def parse_list(cls, lis, depth):
         for value in lis:
             if not isinstance(value, (dict, list)):
                 index = lis.index(value)
-                cls.add_value(index, value, depth)
+                cls._add_value(index, value, depth)
             else:
                 cls.parse_dict(value, depth)
 
     @classmethod
-    def add_header(cls, value, depth):
+    def _add_header(cls, value, depth):
         chain = cls.build_header_chain(depth)
         cls.cls_dict_markdown += chain.replace('value', value.title())
 
     @classmethod
-    def add_value(cls, key, value, depth):
+    def _add_value(cls, key, value, depth):
         chain = cls.build_value_chain(key, value, depth)
         cls.cls_dict_markdown += chain
 
