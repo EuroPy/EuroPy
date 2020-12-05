@@ -1,6 +1,6 @@
+import json
 import os
-import json, yaml
-from datetime import datetime
+import yaml
 from typing import Dict
 from typing import List
 
@@ -11,7 +11,6 @@ from europy.lifecycle.report import Report
 from europy.lifecycle.result import TestResult
 from europy.lifecycle.result_promise import TestPromise
 from europy.utils import isnotebook
-
 
 __tests: dict = dict()
 __report = Report()
@@ -57,10 +56,12 @@ def report_model_details(path: str):
     details = ModelDetails.of(path)
     __report.model_card.model_details = details
 
+
 def execute_tests(clear: bool = True, add_to_report: bool = True, *args, **kwargs):
     global __report
-    
-    test_results: List[TestResult] = [__tests[key].execute(__report.directory, *args, **kwargs) for key in __tests.copy()]
+
+    test_results: List[TestResult] = [__tests[key].execute(__report.directory, *args, **kwargs) for key in
+                                      __tests.copy()]
     test_result_df = DataFrame([x.__dict__ for x in test_results])
 
     if add_to_report:
@@ -68,7 +69,6 @@ def execute_tests(clear: bool = True, add_to_report: bool = True, *args, **kwarg
             __report.capture(result)
             for figure in result.figures:
                 __report.figures.append(figure)
-
 
     passing_count = len(list(filter(lambda x: x.success, test_results)))
     failing_count = len(list(filter(lambda x: not x.success, test_results)))
@@ -84,9 +84,10 @@ def execute_tests(clear: bool = True, add_to_report: bool = True, *args, **kwarg
 
     return DataFrame(test_result_df) if isnotebook() else test_results
 
-def generate_report(export_type: str='markdown', clear_report: bool = True):
+
+def generate_report(export_type: str = 'markdown', clear_report: bool = True):
     global __report
-    
+
     if export_type == 'markdown':
         file_name = f'report.md'
         file_path = os.path.join(__report.directory, file_name)
