@@ -111,6 +111,10 @@ class Markdown:
         self.content += "\n"
         return self
 
+    def __add__(self, other):
+        self.content += self.create_block(other.content)
+        return self
+
     @classmethod
     def getDictMarkdownData(cls):
         return cls.cls_dict_markdown

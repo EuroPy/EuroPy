@@ -1,5 +1,6 @@
 from datetime import datetime
 from typing import List, Optional
+from europy.lifecycle.markdowner import Markdown
 
 class ModelDetails:
     def __init__(self, title: str,
@@ -46,3 +47,10 @@ class ModelDetails:
         self.data_url = data_url
         
         self.description = description
+    
+    def to_markdown(self, level: int=3) -> Markdown:
+        md = Markdown()
+        md.add_header('Model Details', level)
+        md.add_dict_content(self.__dict__)
+
+        return md
