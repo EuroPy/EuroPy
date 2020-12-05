@@ -1,9 +1,9 @@
 import json
 import os
-import yaml
 from typing import Dict
 from typing import List
 
+import yaml
 from pandas import DataFrame
 
 from europy.lifecycle.model_details import ModelDetails
@@ -38,7 +38,7 @@ def capture_model_details(details: ModelDetails):
 
 def capture_parameters(name: str, params: Dict):
     # combine parameters
-    __report.model_card.parameters[name] = {**__report.model_card['parameters'].get(name, {}), **params}
+    __report.model_card.parameters[name] = {**__report.model_card.parameters.get(name, {}), **params}
 
 
 def report_model_params(file_path: str):
