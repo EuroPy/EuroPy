@@ -45,7 +45,7 @@ def save_image_example(plots: dict):
     ax.plot(x, np.sin(x) + np.random.randn(50))
     ax.set_title("'fivethirtyeight' style sheet")
 
-    plots['fivethirtyeight fig'] = plt
+    plots['fivethirtyeight_fig'] = plt
 
 
 report_model_params('tests/param_example.yml')
