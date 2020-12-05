@@ -92,7 +92,7 @@ ___
 #### Figures
 
 
-![fivethirtyeight fig](figures/fivethirtyeight fig.png)
+![fivethirtyeight fig](./figures/fivethirtyeight fig.png)
 
 
 
