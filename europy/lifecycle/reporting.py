@@ -1,9 +1,9 @@
+import json
 import os
-import json, yaml
-from datetime import datetime
 from typing import Dict
 from typing import List
 
+import yaml
 from pandas import DataFrame
 
 from europy.lifecycle.model_details import ModelDetails
@@ -33,24 +33,12 @@ def clear_tests():
 
 
 def capture_model_details(details: ModelDetails):
-    __report.model_card['details'] = details
+    __report.model_card.model_details = details
 
 
 def capture_parameters(name: str, params: Dict):
     # combine parameters
-    __report.model_card['parameters'][name] = {**__report.model_card['parameters'].get(name, {}), **params}
-
-
-def make_report_dir():
-    root_report_directory = '.europy/reports'
-    report_directory = os.path.join(root_report_directory, f'{datetime.now().strftime("%d%m%Y_%H%M%S")}')
-    if not os.path.exists(report_directory):
-        os.makedirs(report_directory)
-
-    img_dir = os.path.join(report_directory, 'figures')
-    if not os.path.exists(img_dir):
-        os.makedirs(img_dir)
-    return report_directory
+    __report.model_card.parameters[name] = {**__report.model_card.parameters.get(name, {}), **params}
 
 
 def report_model_params(file_path: str):
@@ -68,37 +56,25 @@ def report_model_details(path: str):
     details = ModelDetails.of(path)
     __report.model_card.model_details = details
 
-def execute_tests(clear: bool = False, *args, **kwargs):
-    report = Report()
-    report_directory = make_report_dir()
-    test_results: List[TestResult] = [__tests[key].execute(report_directory, *args, **kwargs) for key in __tests.copy()]
+
+def execute_tests(clear: bool = True, add_to_report: bool = True, *args, **kwargs):
+    global __report
+
+    test_results: List[TestResult] = [__tests[key].execute(__report.directory, *args, **kwargs) for key in
+                                      __tests.copy()]
     test_result_df = DataFrame([x.__dict__ for x in test_results])
 
-    for result in test_results:
-        report.capture(result)
-        for figure in result.figures:
-            report.figures.append(figure)
-
-    ## TODO: The model card and params should come from some test results
-    ## Then those should be combined into the report itself
-    report.model_card = __report.model_card
+    if add_to_report:
+        for result in test_results:
+            __report.capture(result)
+            for figure in result.figures:
+                __report.figures.append(figure)
 
     passing_count = len(list(filter(lambda x: x.success, test_results)))
     failing_count = len(list(filter(lambda x: not x.success, test_results)))
 
-    file_name = f'report.json'
-    file_path = os.path.join(report_directory, file_name)
-    # this is new call
-    md = report.to_markdown()
-    md.save(report_directory, 'report.md')
-    # this is old call
-    # report.to_markdown_old(report_directory)
-    with open(file_path, 'w') as outfile:
-        outfile.write(report.to_dictionaries(pretty=True))
-
     print("========= EuroPy Test Results =========")
     # TODO: Replace this with the markdown file instead of JSON
-    print(f"Report output: file://{os.environ['PWD']}/{report_directory}/report.json")
     print(f"Total Tests: {len(test_results)}")
     print(f"Passing: {passing_count}")
     print(f"Failing: {failing_count}")
@@ -107,3 +83,24 @@ def execute_tests(clear: bool = False, *args, **kwargs):
         clear_tests()
 
     return DataFrame(test_result_df) if isnotebook() else test_results
+
+
+def generate_report(export_type: str = 'markdown', clear_report: bool = True):
+    global __report
+
+    if export_type == 'markdown':
+        file_name = f'report.md'
+        file_path = os.path.join(__report.directory, file_name)
+        md = __report.to_markdown()
+        md.save(__report.directory, 'report.md')
+    elif export_type == 'json':
+        file_name = f'report.json'
+        file_path = os.path.join(__report.directory, file_name)
+        with open(file_path, 'w') as outfile:
+            outfile.write(__report.to_dictionaries(pretty=True))
+
+    print("========= EuroPy Report Generated =========")
+    print(f"Report output: file://{os.path.join(os.environ['PWD'], __report.directory, file_name)}")
+
+    if clear_report:
+        __report = Report()

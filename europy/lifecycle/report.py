@@ -1,14 +1,14 @@
 import json
-from typing import Union
+import os
 from datetime import datetime
-
-from europy.lifecycle.markdowner import Markdown
-from europy.lifecycle.model_details import ModelDetails
-from europy.lifecycle.model_card import ModelCard
-from europy.lifecycle.report_figure import ReportFigure
+from typing import Union
 
 from pandas import DataFrame
 
+from europy.lifecycle.markdowner import Markdown
+from europy.lifecycle.model_card import ModelCard
+from europy.lifecycle.model_details import ModelDetails
+from europy.lifecycle.report_figure import ReportFigure
 from europy.lifecycle.result import TestResult, TestLabel
 
 
@@ -42,12 +42,13 @@ class Report:
 
         self.timestamp = datetime.now()
 
+        self.directory = self.make_report_dir(self.title)
 
     def to_markdown(self) -> Markdown:
         md = Markdown()
         md.add_header(f'{self.title}', 1)
         # md.add_horizontal_line()
-        
+
         md += self.model_card.to_markdown()
 
         md.add_horizontal_line()
@@ -57,7 +58,7 @@ class Report:
             test_md = test.to_markdown()
             md += test_md
             md.add_horizontal_line()
-        
+
         md.add_md_content("")
         return md
 
@@ -67,3 +68,16 @@ class Report:
 
     def capture(self, test_result: TestResult):
         self.test_results[test_result.key] = test_result
+
+    @classmethod
+    def make_report_dir(cls, title):
+        root_report_directory = '.europy/reports'
+        report_directory = os.path.join(root_report_directory,
+                                        f'{title.replace(" ", "_")}_{datetime.now().strftime("%d%m%Y_%H%M%S")}')
+        if not os.path.exists(report_directory):
+            os.makedirs(report_directory)
+
+        img_dir = os.path.join(report_directory, 'figures')
+        if not os.path.exists(img_dir):
+            os.makedirs(img_dir)
+        return report_directory

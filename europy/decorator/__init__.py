@@ -95,7 +95,7 @@ def model_details(file_path: str = None):
             import json, yaml
 
             # pull current report (generated @ __init__)
-            details = reporting.__report.model_card['details']
+            details = reporting.__report.model_card.details
 
             func_spec = inspect.getfullargspec(func)
 
@@ -141,7 +141,7 @@ def using_params(file_path: str, report=True):
             file_name = os.path.split(file_path)[0]
             func_spec = inspect.getfullargspec(func)
             if report:
-                params = reporting.__report.model_card['parameters'].get(func_name, {})
+                params = reporting.__report.model_card.parameters.get(func_name, {})
             else:
                 params = {}
 

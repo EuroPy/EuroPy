@@ -9,7 +9,7 @@ from europy.decorator import test, bias, data_bias, fairness, transparency, acco
     minimum_functionality, model_details, using_params
 from europy.decorator.factories import decorator_factory
 from europy.lifecycle.model_details import ModelDetails
-from europy.lifecycle.reporting import execute_tests, report_model_details, report_model_params
+from europy.lifecycle.reporting import execute_tests, report_model_details, report_model_params, generate_report
 from europy.lifecycle.result import TestLabel, TestResult
 
 # This is how you make your own decorator for tests with a custom label or with a provided label
@@ -168,9 +168,12 @@ def params(op1: int = None, op2: int = None, text_example: str = None, list_exam
 def test_execute():
     report_model_params('tests/param_example.yml')
     report_model_details('tests/model_details_example.yml')
-    results: List[TestResult] = execute_tests()
+    results: List[TestResult] = execute_tests(clear=False)
+    
     assert all([x.success for x in results])
     assert len(results) == 11
+
+    generate_report(export_type='markdown', clear_report=False)
 
 
 def test_execute_clear():
@@ -184,3 +187,5 @@ def test_execute_clear():
 
     results: List[TestResult] = execute_tests()
     assert len(results) == 1
+
+    generate_report(export_type='markdown')
