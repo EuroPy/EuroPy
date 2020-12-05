@@ -100,7 +100,7 @@ def generate_report(export_type: str = 'markdown', clear_report: bool = True):
             outfile.write(__report.to_dictionaries(pretty=True))
 
     print("========= EuroPy Report Generated =========")
-    print(f"Report output: file://{os.environ['PWD']}{os.path.join(__report.directory, file_name)}")
+    print(f"Report output: file://{os.path.join(os.environ['PWD'], __report.directory, file_name)}")
 
     if clear_report:
         __report = Report()
