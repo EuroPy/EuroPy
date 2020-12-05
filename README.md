@@ -55,6 +55,7 @@ report_model_details('tests/model_details_example.yml')
 execute_tests(clear=True, input=1)
 generate_report(export_type='markdown', clear_report=True)
 ```
+Pulled from [this](./testing-notebook.ipynb) notebook
 
 ### Example Notebook Output
 ![Notebook Output](./.img/notebook-output-1.png)
