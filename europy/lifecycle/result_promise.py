@@ -3,7 +3,7 @@ from typing import List, Union
 
 from pandas import DataFrame
 
-from europy.lifecycle.report import TestResult, TestLabel
+from europy.lifecycle.report import TestResult, TestLabel, Report
 from europy.lifecycle.report_figure import ReportFigure
 
 
@@ -27,7 +27,7 @@ class TestPromise:
         if self.description is None and other.description is not None:
             self.description = other.description
 
-    def execute(self, report_directory: str, *args, **kwargs) -> TestResult:
+    def execute(self, report: Report, *args, **kwargs) -> TestResult:
         print(f"Execute - {self.key} ({self.labels})")
         try:
             plots = {}
@@ -36,11 +36,11 @@ class TestPromise:
 
             result: Union[float, str, bool, DataFrame] = self.func(*args, **kwargs)
             print(f"\tPASS")
-
+            report.make_report_dir()
             return TestResult(self.key,
                               self.labels,
                               result=result,
-                              figures=[ReportFigure.of(name, report_directory, plot) for name, plot in plots.items()],
+                              figures=[ReportFigure.of(name, report.directory, plot) for name, plot in plots.items()],
                               description=self.description,
                               success=True)
         except Exception as ex:

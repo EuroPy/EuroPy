@@ -60,7 +60,7 @@ def report_model_details(path: str):
 def execute_tests(clear: bool = True, add_to_report: bool = True, *args, **kwargs):
     global __report
 
-    test_results: List[TestResult] = [__tests[key].execute(__report.directory, *args, **kwargs) for key in
+    test_results: List[TestResult] = [__tests[key].execute(__report, *args, **kwargs) for key in
                                       __tests.copy()]
     test_result_df = DataFrame([x.__dict__ for x in test_results])
 

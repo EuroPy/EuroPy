@@ -1,7 +1,9 @@
-import os
 import errno
+import os
 from typing import Any, List
+
 from pandas import DataFrame
+
 from europy.lifecycle.report_figure import ReportFigure
 
 
@@ -92,6 +94,8 @@ class Markdown:
                 self.content += "\n"
                 return self
             self.content += "\n"
+            self.add_md_content(f"**{fig.title}**")
+            self.add_md_content(fig.description)
             self.add_image(fig.img_path, fig.title)
         self.content += "\n"
         return self
