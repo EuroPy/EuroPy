@@ -63,6 +63,10 @@ Pulled from [this](./testing-notebook.ipynb) notebook
 ### Example Standard Output
 ![Standard Output](./.img/standard-output-1.png)
 
+### Other Examples
+
+Interested in seeing a more concrete example? EuroPy has a sibling repository [EuroPy Examples](https://github.com/EuroPy/EuroPy-Examples) that contains a more detailed demonstration of how to use the EuroPy testing framework for a more concrete use case. 
+
 ## Testing Report
 When the `generate_report` function is called, all recorded tests are flushed to a report file. The report can be exported in markdown or JSON format. An example of a testing report for the above example can be found [HERE](./.img/report.md)
 
