@@ -55,7 +55,6 @@ class TestResult:
     
         md.add_text(self.description)
         
-        
         label_list = [f'`{l}`' for l in self.labels]
         md.add_md_content(f'**Labels**: {", ".join(label_list)}')
 
@@ -65,9 +64,9 @@ class TestResult:
         if isinstance(self.result, str):
             md.add_text(self.result)
         if isinstance(self.result, Tuple):
-            md.add_text(f'{self.tuple}')             
-            # mdTestResult.add_dict_content(
-            #     json.loads(json.dumps(self.result.__dict__)))  # couldn't test enough this part
+            md.add_text(f'{self.tuple}')
+        if isinstance(self.result, dict):
+            md.add_dict_content(self.result)
 
         if len(self.figures) > 0:
             md.add_header('Figures', level+1)
