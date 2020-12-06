@@ -59,6 +59,7 @@ class Markdown:
         return self
 
     def add_image(self, file_path: str, alt_text: str):
+        self.content += f'\n**{alt_text}**\n\n'
         self.content += self.create_block("![{}]({})".format(alt_text, file_path), 2)
         return self
 
@@ -86,6 +87,7 @@ class Markdown:
     def add_data_frame(self, df: DataFrame):
         self.content += self.create_block("", 1)
         self.content += df.to_markdown()
+        self.content += '\n\n'
         return self
 
     def add_image_array(self, figure_arr: [ReportFigure]):

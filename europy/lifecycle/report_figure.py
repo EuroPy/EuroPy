@@ -18,7 +18,7 @@ class ReportFigure:
 
     @staticmethod
     def of(name: str, report_directory: str, plot: pyplot):
-        report_figure = ReportFigure()
+        report_figure = ReportFigure(title=name)
         fig_rel_path = os.path.join('figures', f'{name}.png')
         fig_path = os.path.join(report_directory, fig_rel_path)
 
