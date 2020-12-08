@@ -6,6 +6,18 @@ EuroPy is designed to work within an Iron Python interactive environment (i.e. J
 
 ## Philosophy
 As the use of machine learning becomes increasingly common, there is a greater need to address issues of reproducibility and the prevalence of ML systems' unforeseen adverse effects. Doing so requires a more structured approach to evaluating ML systems. EuroPy is a ML testing library that incorporates recommendations from existing literature to aid in the organization and reporting of tests in the ML pipeline. EuroPy is a lightweight testing framework designed to help data scientists and machine learning engineers write and generate results for custom tests to address factors such as Accuracy, Bias, Fairness, Data Bias, Minimum Functionality, etc. that are oftentimes not considered in the development of ML models and pipelines. By encouraging developers to consider potential sources of bias through ML testing, the EuroPy testing framework aims to minimize negative societal impact, address ethical debt, and foster responsible ML prior to deployment. 
+
+## Installation
+### Latest Release:
+```python
+pip install europy
+```
+
+### Locally from Source Code
+```python
+python setup.py install
+```
+
 ## Usage
 
 Creating a test function is accomplished by simply decorating any function with decorators from `europy.decorators`. This will register your test function with the EuroPy lifecycle. In order to execute all registered tests you simply need to execute the `europy.lifecycle.reporting.execute_tests` function. Any parameters passed to the `execute_tests` function will also be passed to all registered functions. 
@@ -177,8 +189,6 @@ execute_tests()
 report_model_params('model-parameters.yml')
 generate_report()
 ```
-
-
 
 ## Test Decorators
 EuroPy supports a number of test classes out of the box. These test classes have been created by surveying industry practitioners and creating a list of well known testing labels. When defining a testing function you may pass two optional parameters to any decorator: name and description. These parameters are used as metadata and will be included in the resulting test report. The supported labels are listed below. 
